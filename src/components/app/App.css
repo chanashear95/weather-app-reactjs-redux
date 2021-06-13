@@ -1,0 +1,49 @@
+/* Default */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* Global */
+.flex-row-c{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-col-c{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-inline-block{
+    display: inline-block;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.padding-v-20{
+    padding: 20px 0px;
+}
+
+.padding-h-20{
+    padding: 0px 20px;
+}
+
