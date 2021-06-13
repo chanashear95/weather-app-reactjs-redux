@@ -1,4 +1,4 @@
-import SearchInput from "../../global/search/SearchInput";
+import SearchInput from "./search/SearchInput";
 import ForecastContainer from "./forecast/ForecastContainer";
 
 function HomePage(props){
