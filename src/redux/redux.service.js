@@ -7,10 +7,10 @@ export const getReduxState = () =>{
     return store.getState();
   }
 
-  export const setCurrentLocation = (location) =>{
+  export const setCurrentLocation = (locationObj) =>{
     store.dispatch({
-      type: chosenLocationActions.setChosenLocation(),
-      location: location
+      type: chosenLocationActions.setChosenLocation,
+      current_location: locationObj
     })
   }
 

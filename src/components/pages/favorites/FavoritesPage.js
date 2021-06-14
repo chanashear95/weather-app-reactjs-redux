@@ -1,9 +1,8 @@
 import FavoritesList from "./FavoritesList";
 
-function FavoritesPage(props){
+function FavoritesPage(){
     return(
         <div className="page-content-container">
-            Fav
             <FavoritesList />
         </div>
     )

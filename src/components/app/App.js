@@ -1,19 +1,19 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import { getReduxState } from '../../redux/redux.service';
+import store from './../../redux/redux';
 
 import Navbar from '../global/navbar/Navbar';
 import HomePage from '../pages/home/HomePage';
 import FavoritesPage from '../pages/favorites/FavoritesPage';
 
 import './App.css';
-import '../../components/pages/home/search/SearchInput.css';
-import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
 import '../../components/global/navbar/Navbar.css';
 import '../../components/global/navbar/DarkModeToggle.css';
+import '../../components/pages/home/search/SearchInput.css';
+import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
 import '../../responsive.css';
-import { useEffect, useState } from 'react';
-import { getReduxState } from '../../redux/redux.service';
-import store from './../../redux/redux';
-
 
 function App() {
 

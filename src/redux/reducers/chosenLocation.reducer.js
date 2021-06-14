@@ -2,16 +2,17 @@ export const chosenLocationActions = {
     setChosenLocation: 'Set_Chosen_Location',
 }
 
-const chosenLocationReducer = (state = {}, action) => {
-    let tempState = {...state};
+let defaultState = {location_key: "215854", name: "Tel Aviv"}
+
+const chosenLocationReducer = (state = defaultState, action) => {
     switch (action.type) {
         case 'Set_Chosen_Location':
-            tempState = action.location;
+            state = action.current_location
             break;
         default:
             return state;
     }
-    return tempState;
+    return state;
 }
 
 export default chosenLocationReducer;
