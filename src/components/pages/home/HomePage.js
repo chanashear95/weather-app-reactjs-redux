@@ -1,11 +1,16 @@
+import { useState } from 'react';
+
 import SearchInput from "./search/SearchInput";
-import ForecastContainer from "./forecast/ForecastContainer";
+import WeatherDisplay from './weatherDisplay/WeatherDisplay';
 
 function HomePage(props){
+
+    const [selectedLocationKey, setSelectedLocationKey] = useState('1123655');
+
     return(
         <div>
             <SearchInput />
-            <ForecastContainer />
+            <WeatherDisplay selectedLocationKey={selectedLocationKey}/>
         </div>
     )
 }

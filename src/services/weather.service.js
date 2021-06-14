@@ -32,7 +32,7 @@ export const searchAutoComplete = async (searchText) => {
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
-    return await fetch(`${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`, {
+    return await fetch(`${proxy_url}${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`, {
         method: 'GET',
         headers: {
             'Content-Type' : 'application/json'
@@ -50,7 +50,7 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
 }
 
 export const getFiveDayForecastByLocationKey = async (location_key) => {
-    return await fetch(`${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`, {
+    return await fetch(`${proxy_url}${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`, {
         method: "GET",
         headers: {
             "Content-Type" : 'application/json'
