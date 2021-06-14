@@ -67,3 +67,7 @@ input:focus{
     min-height: 100vh;
     padding-top: 80px;
 }
+
+.app-darkmode .page-content-container{
+    background-color: #262121;
+}

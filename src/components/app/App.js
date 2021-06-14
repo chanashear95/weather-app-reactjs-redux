@@ -8,27 +8,26 @@ import './App.css';
 import '../../components/pages/home/search/SearchInput.css';
 import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
 import '../../components/global/navbar/Navbar.css';
+import '../../components/global/navbar/DarkModeToggle.css';
 import '../../responsive.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getReduxState } from '../../redux/redux.service';
 import store from './../../redux/redux';
 
 
 function App() {
 
+  const [darkModeOn, setDarkModeOn] = useState(false)
+
   useEffect(() => {
     store.subscribe(()=>{
-          let state = getReduxState();
-            console.log(state);
+          let reduxState = getReduxState();
+          setDarkModeOn(reduxState.darkMode);
     })
-    // let state = store.getState();
-    // console.log(state);
-    // let store = subscribeToStore();
-    // console.log(store)
   }, [])
 
   return (
-    <div>
+    <div className={darkModeOn ? 'app-darkmode' : ''}>
       <Router>
             <Navbar />
             <Route exact path="/" render={() => <HomePage />} />
