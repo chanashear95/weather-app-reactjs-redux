@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Navbar(props) {
     return (
-        <nav className="flex-between padding-h-20">
+        <nav className="flex-between padding-h-20 navbar">
             <div>
                 <p>Weather Forecast</p>
             </div>

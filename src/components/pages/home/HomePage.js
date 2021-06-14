@@ -7,9 +7,13 @@ function HomePage(props){
 
     const [selectedLocationKey, setSelectedLocationKey] = useState('1123655');
 
+    const getSelectedLocationFromSearch = (location_key) => {
+        setSelectedLocationKey(location_key);
+    }
+
     return(
-        <div>
-            <SearchInput />
+        <div className="page-content-container flex-col">
+            <SearchInput selectLocation={getSelectedLocationFromSearch}/>
             <WeatherDisplay selectedLocationKey={selectedLocationKey}/>
         </div>
     )

@@ -5,7 +5,9 @@ import HomePage from '../pages/home/HomePage';
 import FavoritesPage from '../pages/favorites/FavoritesPage';
 
 import './App.css';
-
+import '../../components/pages/home/search/SearchInput.css';
+import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
+import '../../components/global/navbar/Navbar.css';
 import '../../responsive.css';
 
 

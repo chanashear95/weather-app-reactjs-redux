@@ -42,25 +42,32 @@ function WeatherDisplay(props) {
     }
 
     return (
-        <div style={{border: '1px solid #000'}}>
+        <div className="weather-display-container relative">
 
             <div>
-                <p>
-                    {metricTemperature ?
-                        selectedLocationCurrentConditions.Temperature.Metric.Value
-                        :
-                        selectedLocationCurrentConditions.Temperature.Imperial.Value
-                    }
+                <p className="chosen-location-title">Tel Aviv</p>
+                <p>Monday June 14, 2021</p>
+                <p>12:30 <small>PM</small></p>
+
+            </div>
+
+            <div className="text-center current-conditions-container">
+                <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
+                <p className="current-conditions-degrees">
+                {metricTemperature ?
+                    selectedLocationCurrentConditions.Temperature.Metric.Value
+                    :
+                    selectedLocationCurrentConditions.Temperature.Imperial.Value
+                }
                     °
                 </p>
-                <span onClick={switchToFahrenheit}>F°</span> | <span onClick={switchToMetric}>C°</span>
+            <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> | <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={switchToMetric}>C°</span>
             </div>
 
-            <div>
-                <p>{selectedLocationCurrentConditions.WeatherText}</p>
+           
+            <div className="five-day-forecast-container">
+                <FiveDayForecast />
             </div>
-
-            <FiveDayForecast />
         </div>
     )
 }

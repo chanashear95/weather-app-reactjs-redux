@@ -1,0 +1,25 @@
+.search-container{
+    height: 220px;
+}
+
+.search-input{
+    padding: 20px;
+    border-radius: 99px;
+    border: 1px solid #000;
+}
+
+.autocomplete-container{
+    border: 1px solid #000;
+    height: 100px;
+    overflow-y: scroll;
+}
+
+.suggestion-item{
+    transition: .2s ease-in-out all;
+    margin: 0;
+    padding: 10px;
+}
+
+.suggestion-item:hover {
+    background-color: grey;
+}

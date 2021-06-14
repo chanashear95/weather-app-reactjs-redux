@@ -18,17 +18,18 @@ function SearchInput(props) {
     }
 
     const handleSelectedLocation = (location_key) => {
-        console.log(location_key);
+        setLocationSuggestions([]);
+        props.selectLocation(location_key);
     }
 
     return (
-        <div>
-            <input placeholder="Search..." onChange={handleSearchChange} />
+        <div className="flex-col search-container">
+            <input className="search-input w-100" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 ?
-                <div>
+                <div className="autocomplete-container w-100">
                     {locationSuggestions.map(location => {
                         return (
-                            <p onClick={() => handleSelectedLocation(location.key)} key={location.key}>{location.city}, {location.country}</p>
+                            <p className="suggestion-item clickable" onClick={() => handleSelectedLocation(location.key)} key={location.key}>{location.city}, {location.country}</p>
                         )
                     })}
                 </div>

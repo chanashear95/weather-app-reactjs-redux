@@ -11,6 +11,11 @@ a{
     text-decoration: none;
 }
 
+input:focus{
+    outline: none;
+    border: 1px solid red
+}
+
 /* Global */
 .flex-row-c{
     display: flex;
@@ -24,11 +29,9 @@ a{
     align-items: center;
 }
 
-.flex-col-c{
+.flex-col{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .d-inline-block{
@@ -47,3 +50,20 @@ a{
     padding: 0px 20px;
 }
 
+.w-100{
+    width: 100%;
+}
+
+.relative{
+    position: relative;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+.page-content-container{
+    padding: 50px;
+    min-height: 100vh;
+    padding-top: 80px;
+}

@@ -76,7 +76,7 @@ function FiveDayForecast(props) {
     }
 
     return (
-        <div className="flex-row-c">
+        <div className="flex-between">
             {fiveDayForecast.DailyForecasts.map(forecast => {
                 return (
                     <div>

@@ -1,0 +1,49 @@
+.weather-display-container{
+    background-image: url('../../../../images/weatherBg/rain_bg.png');
+    flex: 2;
+    border-radius: 40px;
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.five-day-forecast-container{
+    background: rgba(0,0,0,.6);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    padding: 20px;
+}
+
+.chosen-location-title{
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+.current-conditions-container{
+    margin-top: -40px;
+}
+
+.current-conditions-text{
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+
+.current-conditions-degrees{
+    font-size: 2.5rem;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+.metric-toggle{
+    transition: .2s ease-in-out all;
+    padding: 0px 3px
+}
+
+.metric-toggle.clickable:hover{
+    color: red;
+    text-decoration: underline;
+}

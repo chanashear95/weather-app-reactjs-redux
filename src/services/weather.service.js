@@ -28,7 +28,7 @@ export const searchAutoComplete = async (searchText) => {
     //     }
     // }).catch(e => console.log(e));
 
-    return [{city: 'Hong Kong', country: 'Hong Kong', key: '1123655'}, {city: 'Hefei', country: 'China', key: '101841'}];
+    return [{city: 'Hong Kong', country: 'Hong Kong', key: '1123655'}, {city: 'Hefei', country: 'China', key: '101841'},{city: 'Hong Kong', country: 'Hong Kong', key: '1123655'}, {city: 'Hefei', country: 'China', key: '101841'}];
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
