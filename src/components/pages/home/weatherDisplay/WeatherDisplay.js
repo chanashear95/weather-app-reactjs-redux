@@ -39,7 +39,7 @@ function WeatherDisplay() {
     const checkIfLocationIsFavorite = (location_key) => {
         if (window.localStorage.getItem(local_favorites_key)) {
             let favorites = JSON.parse(window.localStorage.getItem(local_favorites_key));
-            if (favorites.findIndex(i => i == location_key) !== -1) {
+            if (favorites.findIndex(i => i.location_key == location_key) !== -1) {
                 setFavorite(true);
             }
             else {
@@ -99,8 +99,8 @@ function WeatherDisplay() {
                     return (
                         <div className="weather-display-container relative">
 
-                            {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="clickable" /> :
-                                <FavoriteBorderIcon className="clickable" onClick={addOrRemoveFromFavorites} />}
+                            {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
+                                <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
 
                             <div>
                                 <p className="chosen-location-title">Tel Aviv</p>

@@ -8,6 +8,14 @@
     border: 1px solid #000;
 }
 
+.app-darkmode .search-input{
+    background: rgba(255,255,255,.2);
+}
+
+.app-darkmode .search-input::placeholder{
+    color: #fff;
+}
+
 .autocomplete-container{
     border: 1px solid #000;
     height: 100px;

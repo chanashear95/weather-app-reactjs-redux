@@ -47,3 +47,10 @@
     color: red;
     text-decoration: underline;
 }
+
+.favorite-btn{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    font-size: 35px !important;
+}

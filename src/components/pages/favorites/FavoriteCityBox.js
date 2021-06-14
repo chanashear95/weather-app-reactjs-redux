@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import { getCurrentConditionsByLocationKey } from "../../../services/weather.service";
 import { setCurrentLocation } from '../../../redux/redux.service';
 
+import overcast from '../../../images/weatherIcons/overcast.png';
+
+
+import Skeleton from '@material-ui/lab/Skeleton';
+
 function FavoriteCityBox(props) {
 
     const [currentConditions, setCurrentConditions] = useState(
@@ -30,12 +35,17 @@ function FavoriteCityBox(props) {
             "Link": "http://www.accuweather.com/en/tr/alanya/316940/current-weather/316940?lang=en-us"
         }
     );
+    const [loading, setLoading] = useState(true)
 
     useEffect(async () => {
         let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
         if (currentConditions) {
             setCurrentConditions(currentConditions[0])
         }
+        else{
+            //err data
+        }
+        setLoading(false);
     }, [])
 
     const updateCurrentLocation = () => {
@@ -43,9 +53,11 @@ function FavoriteCityBox(props) {
     }
 
     return (
+        loading ? <Skeleton animation="wave" height={'250px'} width={'200px'}/> :
         <Link onClick={updateCurrentLocation} to="/">
             <div>
                 <p>{props.favorite.name}</p>
+                <img src={overcast} />
                 <p>{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
             </div>
         </Link>
