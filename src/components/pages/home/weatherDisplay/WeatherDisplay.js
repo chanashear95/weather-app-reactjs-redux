@@ -9,22 +9,33 @@ import { getReduxState } from '../../../../redux/redux.service';
 import { local_favorites_key, WEATHER_OPTIONS } from '../../../../environments';
 
 import FiveDayForecast from './FiveDayForecast';
+import ErrorMsg from '../../../global/error_message/ErrorMsg';
 
 function WeatherDisplay() {
 
     const [loading, setLoading] = useState(false);
     const [selectedLocationCurrentConditions, setSelectedLocationCurrentConditions] = useState({
-        HasPrecipitation: false,
-        IsDayTime: true,
-        Temperature: {
-            Imperial: {
-                Value: 82,
+            "LocalObservationDateTime": "2021-06-14T22:12:00+02:00",
+            "EpochTime": 1623701520,
+            "WeatherText": "Clear",
+            "WeatherIcon": 33,
+            "HasPrecipitation": false,
+            "PrecipitationType": null,
+            "IsDayTime": false,
+            "Temperature": {
+              "Metric": {
+                "Value": 11.2,
+                "Unit": "C",
+                "UnitType": 17
+              },
+              "Imperial": {
+                "Value": 52,
+                "Unit": "F",
+                "UnitType": 18
+              }
             },
-            Metric: {
-                Value: 28,
-            }
-        },
-        WeatherText: "Overcast",
+            "MobileLink": "http://m.accuweather.com/en/zw/harare/353558/current-weather/353558?lang=en-us",
+            "Link": "http://www.accuweather.com/en/zw/harare/353558/current-weather/353558?lang=en-us",
         location_key: '215854',
         name: 'Tel Aviv'
     });
@@ -32,11 +43,11 @@ function WeatherDisplay() {
     const [isFavorite, setFavorite] = useState(false);
     const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
     const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
-
+    const [err, setErr] = useState(null);
+    const [localTime, setLocalTime] = useState(null);
 
     useEffect(async () => {
         let reduxState = getReduxState();
-        console.log(reduxState)
         // await getSelectedLocationCurrentConditions(reduxState.chosenLocation);
         checkIfLocationIsFavorite(reduxState.chosenLocation.location_key);
     }, [])
@@ -59,10 +70,12 @@ function WeatherDisplay() {
             currentConditions.location_key = locationObj.location_key;
             currentConditions.name = locationObj.name;
             setSelectedLocationCurrentConditions(currentConditions);
+            setLocalTime(currentConditions.LocalObservationDateTime.slice(11,16));
             setLoading(false)
         }
         else {
-            //err getting conditions show err message to refresh
+            let err = "An error occurred. Please try again to see the forecast.";
+            setErr(err);
         }
     }
 
@@ -116,45 +129,49 @@ function WeatherDisplay() {
                             <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={60000} onClose={closeAddedToFavoritesMessage}>
                                 <MuiAlert className="added-favorites-msg" onClose={closeAddedToFavoritesMessage} severity="success">
                                     {selectedLocationCurrentConditions.name} has been added to favorites!
-        </MuiAlert>
+                                </MuiAlert>
                             </Snackbar>
 
                             <Snackbar open={showRemovedFromFavoritesMessage} autoHideDuration={60000} onClose={closeRemoveFromFavoritesMessage}>
-                                <MuiAlert className="removed-favorites-msg" onClose={showRemovedFromFavoritesMessage} severity="success">
+                                <MuiAlert className="removed-favorites-msg" onClose={closeRemoveFromFavoritesMessage} severity="success">
                                     {selectedLocationCurrentConditions.name} was removed from favorites!
-        </MuiAlert>
+                                 </MuiAlert>
                             </Snackbar>
 
+                            {err ? <ErrorMsg err={err} /> :
+                                <Fragment>
+                                    {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
+                                        <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
 
-                            {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
-                                <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
+                                    <div className="location-info-display">
+                                        <div className="flex-row-start">
+                                            <p className="chosen-location-title">Tel Aviv</p>
+                                            <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => i.title == selectedLocationCurrentConditions.WeatherText).icon} />
+                                        </div>
+                                        <p>Monday June 14, 2021</p>
+                                        <p>12:30 <small>PM</small></p>
 
-                            <div className="location-info-display">
-                                <div className="flex-row-start">
-                                    <p className="chosen-location-title">Tel Aviv</p>
-                                    <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => i.title == selectedLocationCurrentConditions.WeatherText).icon} />
-                                </div>
-                                <p>Monday June 14, 2021</p>
-                                <p>12:30 <small>PM</small></p>
+                                    </div>
 
-                            </div>
-
-                            <div className="text-center current-conditions-container">
-                                <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
-                                <p className="current-conditions-degrees">
-                                    {metricTemperature ?
-                                        selectedLocationCurrentConditions.Temperature.Metric.Value
-                                        :
-                                        selectedLocationCurrentConditions.Temperature.Imperial.Value
-                                    }°
+                                    <div className="text-center current-conditions-container">
+                                        <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
+                                        <p className="current-conditions-degrees">
+                                            {metricTemperature ?
+                                                selectedLocationCurrentConditions.Temperature.Metric.Value
+                                                :
+                                                selectedLocationCurrentConditions.Temperature.Imperial.Value
+                                            }°
                                 </p>
-                                <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> |
+                                        <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> |
                                 <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={switchToMetric}>C°</span>
-                            </div>
+                                    </div>
+                                </Fragment>
+                            }
 
                             <div className="five-day-forecast-container">
                                 <FiveDayForecast />
                             </div>
+
                         </div>
                     )
                 }

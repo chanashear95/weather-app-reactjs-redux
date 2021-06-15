@@ -6,6 +6,7 @@
     background-size: cover;
     background-image: url('../../../../images//weatherBg/morning.jpg');
     box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
+    overflow: hidden;
 }
 
 .app-darkmode .weather-display-container{
@@ -30,6 +31,8 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     padding: 10px 25px;
+    transition: 1s ease-in-out all;
+    transform: translateY(220px)
 }
 
 .five-day-forecast-container p {
@@ -108,3 +111,4 @@
 .daily-forecast p:first-of-type{
     font-size: 18px;
 }
+

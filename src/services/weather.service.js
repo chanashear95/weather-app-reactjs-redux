@@ -1,4 +1,3 @@
-
 import { weather_env, proxy_url } from '../environments';
 
 export const searchAutoComplete = async (searchText) => {
@@ -27,8 +26,6 @@ export const searchAutoComplete = async (searchText) => {
             return false;
         }
     }).catch(e => console.log(e));
-
-    // return [{city: 'Hong Kong', country: 'Hong Kong', key: '1123655'}, {city: 'Hefei', country: 'China', key: '101841'},{city: 'Hong Kong', country: 'Hong Kong', key: '1123655'}, {city: 'Hefei', country: 'China', key: '101841'}];
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {

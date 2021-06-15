@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { Link } from 'react-router-dom';
 import { getCurrentConditionsByLocationKey } from "../../../services/weather.service";
 import { setCurrentLocation } from '../../../redux/redux.service';
-
 import { WEATHER_OPTIONS } from '../../../environments';
-
+import ErrorMsg from '../../global/error_message/ErrorMsg';
 
 function FavoriteCityBox(props) {
 
@@ -33,13 +32,16 @@ function FavoriteCityBox(props) {
             "Link": "http://www.accuweather.com/en/tr/alanya/316940/current-weather/316940?lang=en-us"
         }
     );
+    const [err, setErr] = useState(null);
+
     useEffect(async () => {
         let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
         if (currentConditions) {
             setCurrentConditions(currentConditions[0])
         }
         else {
-            //err data
+            let err = 'Could not display weather. Please try again.';
+            setErr(err);
         }
     }, [])
 
@@ -51,10 +53,14 @@ function FavoriteCityBox(props) {
         <Link onClick={updateCurrentLocation} to="/">
             <div style={{ backgroundColor: WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).bg_color }} className="favorite-card flex-col fade-in relative">
                 <div className="purple-overlay"></div>
-                <p className="favorite-city-title">{props.favorite.name}</p>
-                <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />
-                <p>{currentConditions.WeatherText}</p>
-                <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
+                {err ? <ErrorMsg err={err}/> :
+                    <Fragment>
+                        <p className="favorite-city-title">{props.favorite.name}</p>
+                        <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />
+                        <p>{currentConditions.WeatherText}</p>
+                        <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
+                    </Fragment>
+                }
             </div>
         </Link>
     )

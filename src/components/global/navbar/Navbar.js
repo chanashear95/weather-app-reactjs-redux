@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 import DarkModeToggle from './DarkModeToggle';
 
-
-function Navbar(props) {
-
+function Navbar() {
     return (
         <nav className="flex-between padding-h-20 navbar">
              <div className=" padding-h-20">
@@ -11,7 +9,7 @@ function Navbar(props) {
                 </div>
 
             <div className="flex-row-c">
-                <div className=" padding-h-20 nav-item">
+                <div className="padding-h-20 nav-item">
                     <Link to="/">Home</Link>
                 </div>
 
@@ -23,6 +21,5 @@ function Navbar(props) {
         </nav>
     )
 }
-
 
 export default Navbar;

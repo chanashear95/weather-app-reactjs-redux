@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getFiveDayForecastByLocationKey } from '../../../../services/weather.service'; 
 import { WEATHER_OPTIONS } from '../../../../environments';
+import ErrorMsg from '../../../global/error_message/ErrorMsg';
 
 function FiveDayForecast(props) {
 
@@ -176,21 +177,29 @@ function FiveDayForecast(props) {
             ]
           
     });
+    const [err, setErr] = useState(null);
 
      useEffect( async () => {
             await getSelectedLocationFiveDayForecast();
+            let forecastContainer = document.getElementsByClassName('five-day-forecast-container')[0];
+            forecastContainer.style.transform = 'translateY(0px)';
      }, [])
 
     const getSelectedLocationFiveDayForecast = async () => {
         // let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
         if (fiveDayForecast) {
-            console.log(fiveDayForecast);
+            setFiveDayForecast(fiveDayForecast);
+        }
+        else{
+          let err = 'An error occured. Please try again to see 5 day forecast.';
+          setErr(err);
         }
     }
 
     return (
         <div className="flex-between">
-            {fiveDayForecast.DailyForecasts.map(forecast => {
+          {err ? <ErrorMsg err={err} /> :
+            fiveDayForecast.DailyForecasts.map(forecast => {
                 return (
                     <div className="daily-forecast">
                       <p>Mon</p>

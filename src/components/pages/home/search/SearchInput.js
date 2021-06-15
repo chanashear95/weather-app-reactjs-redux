@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { searchAutoComplete } from '../../../../services/weather.service';
 import { setCurrentLocation } from '../../../../redux/redux.service';
 
+import ErrorMsg from '../../../global/error_message/ErrorMsg';
+
 function SearchInput() {
 
     const [locationSuggestions, setLocationSuggestions] = useState([
@@ -16,6 +18,7 @@ function SearchInput() {
         // { city: "Hefei", country: "China", key: "101841" }
 
     ]);
+    const [err, setErr] = useState(null);
 
     const handleSearchChange = async (e) => {
         let searchText = e.target.value;
@@ -25,7 +28,8 @@ function SearchInput() {
             setLocationSuggestions(autoCompleteData);
         }
         else {
-            //auto search data err
+            let err = 'An error occured. Please try again.';
+            setErr(err);
         }
     }
 
@@ -39,11 +43,12 @@ function SearchInput() {
     }
 
     return (
-        <div className={locationSuggestions.length > 0 ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
+        <div className={locationSuggestions.length > 0 || err ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
             <input className="search-input" placeholder="Search..." onChange={handleSearchChange} />
-            {locationSuggestions.length > 0 ?
+            {locationSuggestions.length > 0 || err ?
                 <div className="autocomplete-container w-100">
-                    {locationSuggestions.map(location => {
+                    {err ? <div className="text-center"><ErrorMsg err={err}/> </div>: 
+                    locationSuggestions.map(location => {
                         return (
                             <p className="suggestion-item clickable"
                                 onClick={() => handleSelectedLocation(location.key, location.name)}
@@ -51,7 +56,8 @@ function SearchInput() {
                                 {location.city}, {location.country}
                             </p>
                         )
-                    })}
+                    })
+                }
                 </div>
                 : ""}
         </div>

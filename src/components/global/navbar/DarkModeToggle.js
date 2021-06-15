@@ -1,37 +1,36 @@
-import Switch from '@material-ui/core/Switch';
 import { useState, useEffect } from 'react';
+import Switch from '@material-ui/core/Switch';
 import { getReduxState, setDarkMode, setLightMode } from '../../../redux/redux.service';
 
-
-function DarkModeToggle(){
+function DarkModeToggle() {
 
     const [darkModeOn, setDarkModeOn] = useState(false);
 
-    useEffect(() => {   
+    useEffect(() => {
         let darkModeOn = getReduxState().darkMode;
         setDarkModeOn(darkModeOn);
     }, [])
 
-   const handleDarkModeToggle = () => {
+    const handleDarkModeToggle = () => {
         setDarkModeOn(prevState => !prevState);
     }
 
     useEffect(() => {
-        if(darkModeOn){
+        if (darkModeOn) {
             setDarkMode();
         }
-        else{
+        else {
             setLightMode();
         }
     }, [darkModeOn])
 
-    return(
+    return (
         <div className="darkmode-toggle-container">
-            <Switch 
-            checked={darkModeOn}
-            onChange={handleDarkModeToggle}
-            color="default"
-            className={darkModeOn ? 'toggle active' : 'toggle'}
+            <Switch
+                checked={darkModeOn}
+                onChange={handleDarkModeToggle}
+                color="default"
+                className={darkModeOn ? 'toggle active' : 'toggle'}
             />
             <p className="dark-mode-text">Dark Mode</p>
         </div>
