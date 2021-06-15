@@ -7,3 +7,15 @@
 .app-darkmode .navbar a{
     color: #fff
 }
+
+.navbar a {
+    color: #545686;
+}
+
+.navbar .nav-item {
+    transition: .2s ease-in-out all;
+}
+
+.navbar .nav-item:hover{
+    transform: translateY(-5px);
+}

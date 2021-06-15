@@ -5,11 +5,22 @@ import { setCurrentLocation } from '../../../../redux/redux.service';
 
 function SearchInput() {
 
-    const [locationSuggestions, setLocationSuggestions] = useState([]);
+    const [locationSuggestions, setLocationSuggestions] = useState([
+        // {
+        //     city: "Hong Kong", country: "Hong Kong", key: "1123655",
+        // },
+        // { city: "Hefei", country: "China", key: "101841" },
+        // {
+        //     city: "Hong Kong", country: "Hong Kong", key: "1123655",
+        // },
+        // { city: "Hefei", country: "China", key: "101841" }
+
+    ]);
 
     const handleSearchChange = async (e) => {
         let searchText = e.target.value;
         let autoCompleteData = await searchAutoComplete(searchText);
+        console.log(autoCompleteData)
         if (autoCompleteData) {
             setLocationSuggestions(autoCompleteData);
         }
@@ -28,8 +39,8 @@ function SearchInput() {
     }
 
     return (
-        <div className="flex-col search-container">
-            <input className="search-input w-100" placeholder="Search..." onChange={handleSearchChange} />
+        <div className={locationSuggestions.length > 0 ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
+            <input className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 ?
                 <div className="autocomplete-container w-100">
                     {locationSuggestions.map(location => {

@@ -13,6 +13,7 @@ import '../../components/global/navbar/Navbar.css';
 import '../../components/global/navbar/DarkModeToggle.css';
 import '../../components/pages/home/search/SearchInput.css';
 import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
+import '../../components/pages/favorites/Favorites.css';
 import '../../responsive.css';
 
 function App() {

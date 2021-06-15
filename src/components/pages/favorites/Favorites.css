@@ -1,0 +1,59 @@
+.favorite-card{
+    width: 250px;
+    height: 300px;
+    border-radius: 20px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
+    transition: .2s ease-in-out all;
+    background-image: url('../../../images/weatherBg/morning.jpg');
+    background-position-y: 40%;
+    background-size: cover;
+}
+
+.app-darkmode .favorite-card{
+    box-shadow:  0px 0px 25px rgb(255 255 255 / 30%);
+}
+
+.favorite-card .weather-icon{
+    width: 120px;
+}
+
+.favorite-card:hover{
+    transform: translateY(-10px);
+}
+
+.favorite-city-title{
+    font-size: 24px;
+}
+
+.favorite-temperature{
+    font-size: 18px;
+}
+
+.MuiSkeleton-text{
+    transform: none !important;
+    border-radius: 20px !important;
+
+}
+
+.purple-overlay{
+    height: 100%;
+    width: 100%;
+    background: #060822;
+    position: absolute;
+    opacity: .3;
+    border-radius: 20px;
+}
+
+.favorite-card p, .favorite-card img {
+    z-index: 1;
+}
+
+.favorites-list a {
+    width: 250px;
+    height: 300px;
+    display: inline-block;
+}

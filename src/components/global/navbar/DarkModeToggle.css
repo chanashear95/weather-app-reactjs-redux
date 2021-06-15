@@ -2,11 +2,11 @@
     padding-left: 40px;;
 }
 
-.toggle .MuiSwitch-switchBase{
-    color: #000;
+.toggle.active .MuiSwitch-switchBase{
+    color: #545686;
 }
 
-.toggle.active .MuiSwitch-switchBase{
+.toggle .MuiSwitch-switchBase{
     color: #fff;
 }
 

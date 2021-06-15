@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getFiveDayForecastByLocationKey } from '../../../../services/weather.service';
+import { getFiveDayForecastByLocationKey } from '../../../../services/weather.service'; 
+import { WEATHER_OPTIONS } from '../../../../environments';
 
 function FiveDayForecast(props) {
 
@@ -158,7 +159,7 @@ function FiveDayForecast(props) {
                 },
                 "Day": {
                   "Icon": 1,
-                  "IconPhrase": "Sunny",
+                  "IconPhrase": "mostly overcast",
                   "HasPrecipitation": false
                 },
                 "Night": {
@@ -191,10 +192,12 @@ function FiveDayForecast(props) {
         <div className="flex-between">
             {fiveDayForecast.DailyForecasts.map(forecast => {
                 return (
-                    <div>
-                        <p> <strong>H</strong>{forecast.Temperature.Maximum.Value}</p>
-                        <p> <strong>L</strong>{forecast.Temperature.Minimum.Value}</p>
-
+                    <div className="daily-forecast">
+                      <p>Mon</p>
+                        <p> <strong>High </strong>{forecast.Temperature.Maximum.Value}°</p>
+                        <p> <strong>Low </strong>{forecast.Temperature.Minimum.Value}°</p>
+                      <p>{forecast.Day.IconPhrase}</p>
+                      <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => forecast.Day.IconPhrase.includes(i.title.toLowerCase())).icon} />
                     </div>
                 )
             })}

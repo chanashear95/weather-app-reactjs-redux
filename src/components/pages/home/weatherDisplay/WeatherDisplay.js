@@ -1,10 +1,12 @@
 import { useEffect, useState, Fragment } from 'react';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import { getCurrentConditionsByLocationKey } from '../../../../services/weather.service';
 import { getReduxState } from '../../../../redux/redux.service';
-import { local_favorites_key } from '../../../../environments';
+import { local_favorites_key, WEATHER_OPTIONS } from '../../../../environments';
 
 import FiveDayForecast from './FiveDayForecast';
 
@@ -28,6 +30,9 @@ function WeatherDisplay() {
     });
     const [metricTemperature, setMetricTemperature] = useState(true);
     const [isFavorite, setFavorite] = useState(false);
+    const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
+    const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
+
 
     useEffect(async () => {
         let reduxState = getReduxState();
@@ -56,7 +61,7 @@ function WeatherDisplay() {
             setSelectedLocationCurrentConditions(currentConditions);
             setLoading(false)
         }
-        else{
+        else {
             //err getting conditions show err message to refresh
         }
     }
@@ -80,13 +85,23 @@ function WeatherDisplay() {
         if (isFavorite) {
             let favIdx = favorites.findIndex(i => i.location_key == selectedLocationCurrentConditions.location_key);
             favorites.splice(favIdx, 1);
+            setShowRemovedFromFavoritesMessage(true);
         }
         else {
-            favorites.push({name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key});
+            favorites.push({ name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key });
+            setShowAddedToFavoritesMessage(true);
         }
         favorites = JSON.stringify(favorites);
         window.localStorage.setItem(local_favorites_key, favorites);
         checkIfLocationIsFavorite(selectedLocationCurrentConditions.location_key);
+    }
+
+    const closeAddedToFavoritesMessage = () => {
+        setShowAddedToFavoritesMessage(false);
+    }
+
+    const closeRemoveFromFavoritesMessage = () => {
+        setShowRemovedFromFavoritesMessage(false);
     }
 
     return (
@@ -98,12 +113,27 @@ function WeatherDisplay() {
                 else {
                     return (
                         <div className="weather-display-container relative">
+                            <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={60000} onClose={closeAddedToFavoritesMessage}>
+                                <MuiAlert className="added-favorites-msg" onClose={closeAddedToFavoritesMessage} severity="success">
+                                    {selectedLocationCurrentConditions.name} has been added to favorites!
+        </MuiAlert>
+                            </Snackbar>
+
+                            <Snackbar open={showRemovedFromFavoritesMessage} autoHideDuration={60000} onClose={closeRemoveFromFavoritesMessage}>
+                                <MuiAlert className="removed-favorites-msg" onClose={showRemovedFromFavoritesMessage} severity="success">
+                                    {selectedLocationCurrentConditions.name} was removed from favorites!
+        </MuiAlert>
+                            </Snackbar>
+
 
                             {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
                                 <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
 
-                            <div>
-                                <p className="chosen-location-title">Tel Aviv</p>
+                            <div className="location-info-display">
+                                <div className="flex-row-start">
+                                    <p className="chosen-location-title">Tel Aviv</p>
+                                    <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => i.title == selectedLocationCurrentConditions.WeatherText).icon} />
+                                </div>
                                 <p>Monday June 14, 2021</p>
                                 <p>12:30 <small>PM</small></p>
 
@@ -118,7 +148,7 @@ function WeatherDisplay() {
                                         selectedLocationCurrentConditions.Temperature.Imperial.Value
                                     }°
                                 </p>
-                                <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> | 
+                                <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> |
                                 <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={switchToMetric}>C°</span>
                             </div>
 

@@ -15,7 +15,7 @@ function FavoritesList(){
     }, [])
 
     return(
-        <div>
+        <div className="favorites-list">
             {favorites.map(favorite => {
                 return(
                     <FavoriteCityBox favorite={favorite}/>

@@ -1,11 +1,18 @@
 .search-container{
-    height: 220px;
+    padding-bottom: 40px;
 }
 
 .search-input{
     padding: 20px;
-    border-radius: 99px;
-    border: 1px solid #000;
+    border-radius: 15px;
+    border: 1px solid #535686;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.autocomplete-open .search-input{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .app-darkmode .search-input{
@@ -17,9 +24,20 @@
 }
 
 .autocomplete-container{
-    border: 1px solid #000;
-    height: 100px;
+    border: 1px solid #535686;
+    height: 150px;
     overflow-y: scroll;
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    top: 57px;
+    width: 70%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top: none;
 }
 
 .suggestion-item{
@@ -29,5 +47,5 @@
 }
 
 .suggestion-item:hover {
-    background-color: grey;
+    background-color: #f0f0f0;
 }
