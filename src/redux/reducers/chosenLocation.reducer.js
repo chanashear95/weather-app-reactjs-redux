@@ -2,7 +2,7 @@ export const chosenLocationActions = {
     setChosenLocation: 'Set_Chosen_Location',
 }
 
-let defaultState = {location_key: "215854", name: "Tel Aviv"}
+let defaultState = {location_key: "", name: ""}
 
 const chosenLocationReducer = (state = defaultState, action) => {
     switch (action.type) {

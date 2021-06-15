@@ -9,7 +9,7 @@ function Navbar() {
             <div className=" padding-h-20">
                 <Link to="/">
 
-                    Weather Forcast</Link>
+                    Weather Forecast</Link>
             </div>
 
             <div className="flex-row-c">

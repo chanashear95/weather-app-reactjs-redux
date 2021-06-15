@@ -110,6 +110,23 @@ input:focus{
     grid-row-gap: 20px;
 }
 
+.app-darkmode p{
+    color: #fff
+}
+
+.purple-btn{
+    background: #545686;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    transition: .2s ease-in-out all;
+}
+
+.purple-btn:hover{
+    background-color: #7274af;
+}
+
 /* Animations */
 .fade-in{
 -webkit-animation: fadein 2s; 

@@ -69,7 +69,6 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
         if(res.status == 200){
             return res.json().then(data => {
                 if(data){
-                    console.log(data)
                 return data;
                 }
                 else{
@@ -81,4 +80,28 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
             return false;
         }
     }).catch(e => false);
+}
+
+export const getConditionsByGeoLocation = async (lat, long) => {
+    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/geoposition/search?apikey=${weather_env.api_key}&q=${lat}%2C%20${long}`);
+    return await fetch(`${proxy_url}${encodedUrl}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type' : 'application/json'
+        }
+    }).then(res => {
+        if(res.status == 200){
+            return res.json().then(data => {
+                if(!data.Code){
+                return data;
+                }
+                else{
+                    return false; //bakashot
+                }
+            })
+        }
+        else{
+            return false;
+        }
+    }).catch(e => console.log(e))
 }

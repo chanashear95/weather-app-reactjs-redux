@@ -39,3 +39,7 @@
     justify-content: center;
     flex-direction: column;
   }
+
+  .full-page-load{
+    height: 100vh;
+  }

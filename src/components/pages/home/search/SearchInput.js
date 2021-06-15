@@ -18,7 +18,7 @@ function SearchInput() {
 
     const handleSearchChange = async (e) => {
         let searchText = e.target.value;
-        searchText = searchText.replace(/[^A-Za-z]/ig, '')
+        searchText = searchText.replace(/[^A-Za-z|| ]/ig, '')
         setErr(null);
         setSearchText(searchText);
         if (e.target.value && e.target.value != " ") {
@@ -45,7 +45,6 @@ function SearchInput() {
             name: location_name,
             location_key: location_key,
         }
-        console.log(locationObj)
         setCurrentLocation(locationObj);
     }
 

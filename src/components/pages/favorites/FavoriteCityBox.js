@@ -61,7 +61,7 @@ function FavoriteCityBox(props) {
     }
 
     return (
-            <div className={Number(localTime.slice(0, 2)) > 5 && Number(localTime.slice(0, 2)) < 12 ? "favorite-card flex-col fade-in relative morning-weather"
+            <div className={Number(localTime.slice(0, 2)) >= 5 && Number(localTime.slice(0, 2)) < 12 ? "favorite-card flex-col fade-in relative morning-weather"
                 :
                 Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "favorite-card flex-col fade-in relative afternoon-weather" :
                     "favorite-card flex-col fade-in relative night-weather"
