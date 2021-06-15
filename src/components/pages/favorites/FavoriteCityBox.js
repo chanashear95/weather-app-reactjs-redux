@@ -33,11 +33,14 @@ function FavoriteCityBox(props) {
         }
     );
     const [err, setErr] = useState(null);
+    const [localTime, setLocalTime] = useState('09:30')
 
     useEffect(async () => {
         let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
         if (currentConditions) {
             setCurrentConditions(currentConditions[0])
+            let localTime = currentConditions[0].LocalObservationDateTime.slice(11, 16);
+            setLocalTime(localTime);
         }
         else {
             let err = 'Could not display weather. Please try again.';
@@ -51,9 +54,13 @@ function FavoriteCityBox(props) {
 
     return (
         <Link onClick={updateCurrentLocation} to="/">
-            <div style={{ backgroundColor: WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).bg_color }} className="favorite-card flex-col fade-in relative">
+            <div className={Number(localTime.slice(0, 2)) > 5 && Number(localTime.slice(0, 2)) < 12 ? "favorite-card flex-col fade-in relative morning-weather"
+                :
+                Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "favorite-card flex-col fade-in relative afternoon-weather" :
+                    "favorite-card flex-col fade-in relative night-weather"
+            }>
                 <div className="purple-overlay"></div>
-                {err ? <ErrorMsg err={err}/> :
+                {err ? <ErrorMsg err={err} /> :
                     <Fragment>
                         <p className="favorite-city-title">{props.favorite.name}</p>
                         <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />

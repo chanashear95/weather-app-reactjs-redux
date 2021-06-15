@@ -87,6 +87,23 @@ input:focus{
     object-fit: contain;
 }
 
+.morning-weather{
+    background-image: url('../../images/weatherBg/morning.jpg');
+}
+
+.afternoon-weather{
+    background-image: url('../../images/weatherBg/afternoon.jpg');
+}
+
+.night-weather{
+    background-image: url('../../images/weatherBg/night.jpg');
+
+}
+
+.afternoon-weather p, .night-weather p, .night-weather span, .afternoon-weather span {
+    color: #fff !important;
+}
+
 /* Animations */
 .fade-in{
 -webkit-animation: fadein 2s; 

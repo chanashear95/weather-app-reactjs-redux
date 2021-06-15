@@ -16,16 +16,13 @@ export const WEATHER_OPTIONS = [
     {
         title: 'Clear',
         icon: '',
-        bg_color: '#abdaea'
     },
     {
         title: 'Overcast',
         icon: overcast,
-        bg_color: '#a1adb8'
     },
     {
         title: 'Sunny',
         icon: sunny,
-        bg_color: '#abdaea'
     },
 ]

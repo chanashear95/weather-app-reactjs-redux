@@ -44,7 +44,7 @@ function WeatherDisplay() {
     const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
     const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
     const [err, setErr] = useState(null);
-    const [localTime, setLocalTime] = useState(null);
+    const [localTime, setLocalTime] = useState('09:30');
 
     useEffect(async () => {
         let reduxState = getReduxState();
@@ -125,7 +125,13 @@ function WeatherDisplay() {
                 }
                 else {
                     return (
-                        <div className="weather-display-container relative">
+                        <div 
+                        className={Number(localTime.slice(0,2)) > 5 && Number(localTime.slice(0,2)) < 12 ? "weather-display-container relative morning-weather" 
+                                    : Number(localTime.slice(0,2)) >= 12 && Number(localTime.slice(0,2)) < 20 ? "weather-display-container relative afternoon-weather" 
+                                    : "weather-display-container relative night-weather" 
+                                    }
+                        
+                        >
                             <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={60000} onClose={closeAddedToFavoritesMessage}>
                                 <MuiAlert className="added-favorites-msg" onClose={closeAddedToFavoritesMessage} severity="success">
                                     {selectedLocationCurrentConditions.name} has been added to favorites!
