@@ -5,6 +5,7 @@ import { setCurrentLocation } from '../../../redux/redux.service';
 import { WEATHER_OPTIONS } from '../../../environments';
 import ErrorMsg from '../../global/error_message/ErrorMsg';
 import FavoriteButton from "../../global/favorite_button/FavoriteButton";
+import Loading from '../../global/loading/Loading';
 
 function FavoriteCityBox(props) {
 
@@ -35,6 +36,7 @@ function FavoriteCityBox(props) {
     );
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState('09:30')
+    const [loading, setLoading] = useState(true);
 
     useEffect(async () => {
         let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
@@ -47,6 +49,7 @@ function FavoriteCityBox(props) {
             let err = 'Could not display weather. Please try again.';
             setErr(err);
         }
+        setLoading(false);
     }, [])
 
     const updateCurrentLocation = () => {
@@ -63,20 +66,21 @@ function FavoriteCityBox(props) {
                 Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "favorite-card flex-col fade-in relative afternoon-weather" :
                     "favorite-card flex-col fade-in relative night-weather"
             }>
-                                <FavoriteButton refreshFavorites={refreshFavorites} isFavorite={true} location={{name: props.favorite.name, location_key: props.favorite.location_key}}/>
+              
+{err || loading ? "" : <FavoriteButton refreshFavorites={refreshFavorites} isFavorite={true} location={{name: props.favorite.name, location_key: props.favorite.location_key}}/>}
         <Link onClick={updateCurrentLocation} to="/">
                 <div className="purple-overlay"></div>
 
                 
-                {err ?<div className="center error"> <ErrorMsg err={err} /> </div> :
-                    <Fragment>
+                {err ?<div className="center error"> <ErrorMsg err={err} /> </div> : loading ?  <Loading /> :
+                    <div className="text-center">
                         <p className="favorite-city-title">{props.favorite.name}</p>
                         <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />
                         <p>{currentConditions.WeatherText}</p>
                         <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
-                    </Fragment>
+                    </div>
                 }
-                        </Link>
+                        </Link>       
             </div>
     )
 }

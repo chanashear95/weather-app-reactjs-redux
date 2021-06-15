@@ -11,6 +11,15 @@
         height: 250px;
         width:200px;
     }
+    .favorite-city-title{
+        padding-top: 20px
+    }
+    .favorite-card .weather-icon{
+        width: 50px
+    }
+    .favorite-card p{
+        margin-bottom: 5px;
+    }
 }
 
 @media only screen and (max-width: 850px){
@@ -72,6 +81,18 @@
     .favorite-card div.error p {
         font-size: 10px;
     }
+    .favorite-card .favorite-btn{
+        width: 20px;
+    height: 20px;
+    right: 15px;
+    top: 15px;
+    }
+    .favorite-card p {
+        font-size: 12px;
+    }
+    .favorite-card img{
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 500px){
@@ -93,5 +114,8 @@
     }
     .page-content-container{
         padding: 80px 5px 10px 5px;
+    }
+    .location-info-display .weather-icon{
+        width: 40px;
     }
 }

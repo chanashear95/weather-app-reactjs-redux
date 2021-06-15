@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { getFiveDayForecastByLocationKey } from '../../../../services/weather.service'; 
 import { WEATHER_OPTIONS } from '../../../../environments';
 import ErrorMsg from '../../../global/error_message/ErrorMsg';
+import { convertFahrenheitToCelcius } from '../../../../functions/temperature';
+import Loading from '../../../global/loading/Loading';
 
 function FiveDayForecast(props) {
 
@@ -178,6 +180,7 @@ function FiveDayForecast(props) {
           
     });
     const [err, setErr] = useState(null);
+    const [loading, setLoading] = useState(true)
 
      useEffect( async () => {
             await getSelectedLocationFiveDayForecast();
@@ -189,22 +192,24 @@ function FiveDayForecast(props) {
         // let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
         if (fiveDayForecast) {
             setFiveDayForecast(fiveDayForecast);
+            setLoading(false)
         }
         else{
           let err = 'An error occured. Please try again to see 5 day forecast.';
           setErr(err);
+          setLoading(false)
         }
     }
 
     return (
         <div className="flex-between">
-          {err ? <ErrorMsg err={err} /> :
+          {err ? <ErrorMsg err={err} /> : loading ? <Loading /> :
             fiveDayForecast.DailyForecasts.map(forecast => {
                 return (
                     <div className="daily-forecast">
                       <p>{new Date(forecast.Date).toString().slice(0,3)}</p>
-                        <p> <strong>High </strong>{forecast.Temperature.Maximum.Value}°</p>
-                        <p> <strong>Low </strong>{forecast.Temperature.Minimum.Value}°</p>
+                        <p> <strong>High </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Maximum.Value) : forecast.Temperature.Maximum.Value}°</p>
+                        <p> <strong>Low </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Minimum.Value) : forecast.Temperature.Minimum.Value}°</p>
                       <p>{forecast.Day.IconPhrase}</p>
                       <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => forecast.Day.IconPhrase.includes(i.title.toLowerCase())).icon} />
                     </div>

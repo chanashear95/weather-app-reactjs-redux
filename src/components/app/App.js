@@ -14,6 +14,7 @@ import '../../components/global/navbar/DarkModeToggle.css';
 import '../../components/pages/home/search/SearchInput.css';
 import '../../components/pages/home/weatherDisplay/WeatherDisplay.css';
 import '../../components/pages/favorites/Favorites.css';
+import '../../components/global/favorite_button/FavoriteButton.css';
 import '../../responsive.css';
 
 function App() {

@@ -6,14 +6,14 @@ import { local_favorites_key, WEATHER_OPTIONS } from '../../../../environments';
 import FiveDayForecast from './FiveDayForecast';
 import ErrorMsg from '../../../global/error_message/ErrorMsg';
 import FavoriteButton from '../../../global/favorite_button/FavoriteButton';
+import Loading from '../../../global/loading/Loading';
 
 function WeatherDisplay() {
 
-    const [loading, setLoading] = useState(false);
     const [selectedLocationCurrentConditions, setSelectedLocationCurrentConditions] = useState({
             "LocalObservationDateTime": "2021-06-14T22:12:00+02:00",
             "EpochTime": 1623701520,
-            "WeatherText": "Clear",
+            "WeatherText": "Sunny",
             "WeatherIcon": 33,
             "HasPrecipitation": false,
             "PrecipitationType": null,
@@ -39,6 +39,7 @@ function WeatherDisplay() {
     const [isFavorite, setFavorite] = useState(false);
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState('09:30');
+    const [loading, setLoading] = useState(false);
 
     useEffect(async () => {
         let reduxState = getReduxState();
@@ -68,6 +69,7 @@ function WeatherDisplay() {
             setLoading(false)
         }
         else {
+            setLoading(false);
             let err = "An error occurred. Please try again to see the forecast.";
             setErr(err);
         }
@@ -85,7 +87,7 @@ function WeatherDisplay() {
         <Fragment>
             {(() => {
                 if (loading) {
-                    return <p>Loading...</p>
+                    return <Loading />
                 }
                 else {
                     return (
@@ -98,7 +100,7 @@ function WeatherDisplay() {
                         >
                            
 
-                            {err ? <ErrorMsg err={err} /> :
+                            {err ? <ErrorMsg err={err} />  :
                                 <Fragment>
                                     <FavoriteButton refreshFavorites={checkIfLocationIsFavorite} isFavorite={isFavorite} location={{name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key}}/>
                                     <div className="location-info-display">
@@ -121,10 +123,10 @@ function WeatherDisplay() {
                                         <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
                                         <p className="current-conditions-degrees">
                                             {metricTemperature ?
-                                                selectedLocationCurrentConditions.Temperature.Metric.Value
-                                                :
-                                                selectedLocationCurrentConditions.Temperature.Imperial.Value
-                                            }°
+                                               parseInt(selectedLocationCurrentConditions.Temperature.Metric.Value) + '° C'
+                                                : 
+                                                parseInt(selectedLocationCurrentConditions.Temperature.Imperial.Value) + '° F'
+                                            }
                                 </p>
                                         <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span> |
                                 <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={switchToMetric}>C°</span>
@@ -133,7 +135,7 @@ function WeatherDisplay() {
                             }
 
                             <div className="five-day-forecast-container">
-                                <FiveDayForecast />
+                                <FiveDayForecast metricTemperature={metricTemperature}/>
                             </div>
 
                         </div>
