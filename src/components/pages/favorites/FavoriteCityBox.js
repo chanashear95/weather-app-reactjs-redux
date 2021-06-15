@@ -68,7 +68,7 @@ function FavoriteCityBox(props) {
                 <div className="purple-overlay"></div>
 
                 
-                {err ?<div className="center"> <ErrorMsg err={err} /> </div> :
+                {err ?<div className="center error"> <ErrorMsg err={err} /> </div> :
                     <Fragment>
                         <p className="favorite-city-title">{props.favorite.name}</p>
                         <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />

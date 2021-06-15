@@ -6,6 +6,7 @@
     background-size: cover;
     box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
     overflow: hidden;
+    min-height: 550px;
 }
 
 .app-darkmode .weather-display-container{

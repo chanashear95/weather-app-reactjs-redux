@@ -202,7 +202,7 @@ function FiveDayForecast(props) {
             fiveDayForecast.DailyForecasts.map(forecast => {
                 return (
                     <div className="daily-forecast">
-                      <p>Mon</p>
+                      <p>{new Date(forecast.Date).toString().slice(0,3)}</p>
                         <p> <strong>High </strong>{forecast.Temperature.Maximum.Value}°</p>
                         <p> <strong>Low </strong>{forecast.Temperature.Minimum.Value}°</p>
                       <p>{forecast.Day.IconPhrase}</p>

@@ -19,18 +19,26 @@ function SearchInput() {
 
     ]);
     const [err, setErr] = useState(null);
+    const [searchText, setSearchText] = useState('');
 
     const handleSearchChange = async (e) => {
         let searchText = e.target.value;
-        let autoCompleteData = await searchAutoComplete(searchText);
-        console.log(autoCompleteData)
-        if (autoCompleteData) {
-            setLocationSuggestions(autoCompleteData);
+        searchText = searchText.replace(/[^A-Za-z]/ig, '')
+        setSearchText(searchText);
+        if(e.target.value && e.target.value != " "){
+ // let autoCompleteData = await searchAutoComplete(searchText);
+// console.log(autoCompleteData)
+// if (autoCompleteData) {
+//     setLocationSuggestions(autoCompleteData);
+// }
+// else {
+//     let err = 'An error occured. Please try again.';
+//     setErr(err);
+// }
         }
-        else {
-            let err = 'An error occured. Please try again.';
-            setErr(err);
-        }
+        
+
+     
     }
 
     const handleSelectedLocation = (location_key, location_name) => {
@@ -49,7 +57,7 @@ function SearchInput() {
 
     return (
         <div className={locationSuggestions.length > 0 || err ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
-            <input id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
+            <input value={searchText} id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 || err ?
                 <div className="autocomplete-container w-100">
                     {err ? <div className="text-center"><ErrorMsg err={err}/> </div>: 
