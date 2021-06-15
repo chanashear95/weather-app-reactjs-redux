@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { searchAutoComplete } from '../../../../services/weather.service';
 import { setCurrentLocation } from '../../../../redux/redux.service';
@@ -42,9 +42,14 @@ function SearchInput() {
         setCurrentLocation(locationObj);
     }
 
+    const handleSearchBlur = () => {
+        setErr(null);
+        setLocationSuggestions([]);
+    }
+
     return (
         <div className={locationSuggestions.length > 0 || err ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
-            <input className="search-input" placeholder="Search..." onChange={handleSearchChange} />
+            <input id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 || err ?
                 <div className="autocomplete-container w-100">
                     {err ? <div className="text-center"><ErrorMsg err={err}/> </div>: 

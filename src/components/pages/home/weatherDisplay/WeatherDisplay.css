@@ -73,6 +73,7 @@
     right: 25px;
     top: 25px;
     font-size: 35px !important;
+    z-index: 1;
 }
 
 .location-info-display .weather-icon{

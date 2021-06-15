@@ -4,6 +4,7 @@ import { getCurrentConditionsByLocationKey } from "../../../services/weather.ser
 import { setCurrentLocation } from '../../../redux/redux.service';
 import { WEATHER_OPTIONS } from '../../../environments';
 import ErrorMsg from '../../global/error_message/ErrorMsg';
+import FavoriteButton from "../../global/favorite_button/FavoriteButton";
 
 function FavoriteCityBox(props) {
 
@@ -52,15 +53,22 @@ function FavoriteCityBox(props) {
         setCurrentLocation(props.favorite);
     }
 
+    const refreshFavorites = () => {
+        props.getFavorites();
+    }
+
     return (
-        <Link onClick={updateCurrentLocation} to="/">
             <div className={Number(localTime.slice(0, 2)) > 5 && Number(localTime.slice(0, 2)) < 12 ? "favorite-card flex-col fade-in relative morning-weather"
                 :
                 Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "favorite-card flex-col fade-in relative afternoon-weather" :
                     "favorite-card flex-col fade-in relative night-weather"
             }>
+                                <FavoriteButton refreshFavorites={refreshFavorites} isFavorite={true} location={{name: props.favorite.name, location_key: props.favorite.location_key}}/>
+        <Link onClick={updateCurrentLocation} to="/">
                 <div className="purple-overlay"></div>
-                {err ? <ErrorMsg err={err} /> :
+
+                
+                {err ?<div className="center"> <ErrorMsg err={err} /> </div> :
                     <Fragment>
                         <p className="favorite-city-title">{props.favorite.name}</p>
                         <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon} />
@@ -68,8 +76,8 @@ function FavoriteCityBox(props) {
                         <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
                     </Fragment>
                 }
+                        </Link>
             </div>
-        </Link>
     )
 }
 

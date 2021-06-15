@@ -9,14 +9,19 @@ function FavoritesList() {
     const [favorites, setFavorites] = useState([]);
 
     useEffect(() => {
+        getFavorites();
+    }, [])
+
+   const  getFavorites = () => {
         if (window.localStorage.getItem(local_favorites_key)) {
             let favorites = JSON.parse(window.localStorage.getItem(local_favorites_key))
             setFavorites(favorites);
         }
-    }, [])
+    }
+
 
     return (
-        <div className="favorites-list">
+        <div className="favorites-list grid-4-col">
             {favorites.length < 1 ?
                 <div className='text-center'>
                     <p> You have not added any cities to your favorites list yet. </p>
@@ -30,7 +35,7 @@ function FavoritesList() {
                 :
                 favorites.map(favorite => {
                     return (
-                        <FavoriteCityBox favorite={favorite} />
+                        <FavoriteCityBox getFavorites={getFavorites} favorite={favorite} />
                     )
                 })}
         </div>

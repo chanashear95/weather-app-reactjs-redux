@@ -1,15 +1,11 @@
 import { useEffect, useState, Fragment } from 'react';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
 import { getCurrentConditionsByLocationKey } from '../../../../services/weather.service';
 import { getReduxState } from '../../../../redux/redux.service';
 import { local_favorites_key, WEATHER_OPTIONS } from '../../../../environments';
 
 import FiveDayForecast from './FiveDayForecast';
 import ErrorMsg from '../../../global/error_message/ErrorMsg';
+import FavoriteButton from '../../../global/favorite_button/FavoriteButton';
 
 function WeatherDisplay() {
 
@@ -41,8 +37,6 @@ function WeatherDisplay() {
     });
     const [metricTemperature, setMetricTemperature] = useState(true);
     const [isFavorite, setFavorite] = useState(false);
-    const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
-    const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState('09:30');
 
@@ -87,36 +81,6 @@ function WeatherDisplay() {
         setMetricTemperature(true);
     }
 
-    const addOrRemoveFromFavorites = () => {
-        let favorites;
-        if (window.localStorage.getItem(local_favorites_key)) {
-            favorites = JSON.parse(window.localStorage.getItem(local_favorites_key));
-        }
-        else {
-            favorites = [];
-        }
-        if (isFavorite) {
-            let favIdx = favorites.findIndex(i => i.location_key == selectedLocationCurrentConditions.location_key);
-            favorites.splice(favIdx, 1);
-            setShowRemovedFromFavoritesMessage(true);
-        }
-        else {
-            favorites.push({ name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key });
-            setShowAddedToFavoritesMessage(true);
-        }
-        favorites = JSON.stringify(favorites);
-        window.localStorage.setItem(local_favorites_key, favorites);
-        checkIfLocationIsFavorite(selectedLocationCurrentConditions.location_key);
-    }
-
-    const closeAddedToFavoritesMessage = () => {
-        setShowAddedToFavoritesMessage(false);
-    }
-
-    const closeRemoveFromFavoritesMessage = () => {
-        setShowRemovedFromFavoritesMessage(false);
-    }
-
     return (
         <Fragment>
             {(() => {
@@ -132,23 +96,11 @@ function WeatherDisplay() {
                                     }
                         
                         >
-                            <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={60000} onClose={closeAddedToFavoritesMessage}>
-                                <MuiAlert className="added-favorites-msg" onClose={closeAddedToFavoritesMessage} severity="success">
-                                    {selectedLocationCurrentConditions.name} has been added to favorites!
-                                </MuiAlert>
-                            </Snackbar>
-
-                            <Snackbar open={showRemovedFromFavoritesMessage} autoHideDuration={60000} onClose={closeRemoveFromFavoritesMessage}>
-                                <MuiAlert className="removed-favorites-msg" onClose={closeRemoveFromFavoritesMessage} severity="success">
-                                    {selectedLocationCurrentConditions.name} was removed from favorites!
-                                 </MuiAlert>
-                            </Snackbar>
+                           
 
                             {err ? <ErrorMsg err={err} /> :
                                 <Fragment>
-                                    {isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
-                                        <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
-
+                                    <FavoriteButton refreshFavorites={checkIfLocationIsFavorite} isFavorite={isFavorite} location={{name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key}}/>
                                     <div className="location-info-display">
                                         <div className="flex-row-start">
                                             <p className="chosen-location-title">Tel Aviv</p>
@@ -156,6 +108,12 @@ function WeatherDisplay() {
                                         </div>
                                         <p>Monday June 14, 2021</p>
                                         <p>12:30 <small>PM</small></p>
+                                        <p style={{fontSize: 18}} className="fade-in">
+                                            {Number(localTime.slice(0,2)) > 5 && Number(localTime.slice(0,2)) < 12 ? "Good Morning" 
+                                            : Number(localTime.slice(0,2)) >= 12 && Number(localTime.slice(0,2)) < 20 ? "Good Afternoon" :
+                                            "Good Night"    
+                                        }
+                                        </p>
 
                                     </div>
 

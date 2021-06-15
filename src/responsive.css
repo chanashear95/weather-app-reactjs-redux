@@ -1,0 +1,53 @@
+@media only screen and (max-width: 850px){
+    .page-content-container{
+        padding: 60px 20px 10px 20px;
+    }
+}
+
+@media only screen and (max-width: 650px){
+    .page-content-container{
+        padding-top: 80px;
+    }
+    .search-input{
+        padding: 10px;
+    }
+
+    .search-container{
+        padding-bottom: 20px;
+    }
+    .autocomplete-container{
+        margin-top: -20px;
+    }
+    .five-day-forecast-container{
+        transform: translateY(0px);
+        overflow-x: scroll;
+        min-width: 100%;
+        -ms-overflow-style: none; 
+        scrollbar-width: none;  
+    }
+    .five-day-forecast-container::-webkit-scrollbar {
+    display: none;
+  }
+    .daily-forecast{
+        min-width: 150px;
+    }
+    .daily-forecast .weather-icon{
+        margin: 0;
+    }
+    .darkmode-toggle-container{
+        padding-left: 10px;
+    }
+    .nav-item.padding-h-20{
+        padding: 0px 10px;
+    }
+    .chosen-location-title,   .current-conditions-degrees{
+        font-size: 2rem;
+    }
+
+    .current-conditions-text{
+        font-size: 2.5rem;
+    }
+    .current-conditions-container{
+        margin-top: 0;
+    }
+}
