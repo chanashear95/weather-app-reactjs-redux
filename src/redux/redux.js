@@ -1,6 +1,6 @@
 import { createStore, combineReducers } from 'redux';
-import darkModeReducer from './reducers/darkMode.reducer';
-import chosenLocationReducer from './reducers/chosenLocation.reducer';
+import darkModeReducer from 'redux/reducers/darkMode.reducer';
+import chosenLocationReducer from 'redux/reducers/chosenLocation.reducer';
 
 
  const allReducers = combineReducers({

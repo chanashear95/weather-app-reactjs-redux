@@ -1,6 +1,6 @@
 
-import overcast from './images/weatherIcons/overcast.png';
-import sunny from './images/weatherIcons/sun.png';
+import overcast from 'images/weatherIcons/overcast.png';
+import sunny from 'images/weatherIcons/sun.png';
 
 export const weather_env = {
     api_key: "TMlFvjdYEcBBxWfsGWWZlZ1CnyRY0sax",

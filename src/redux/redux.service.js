@@ -1,6 +1,6 @@
-import  store  from './redux';
-import { darkModeActions } from './reducers/darkMode.reducer';
-import { chosenLocationActions } from './reducers/chosenLocation.reducer';
+import  store  from 'redux/redux';
+import { darkModeActions } from 'redux/reducers/darkMode.reducer';
+import { chosenLocationActions } from 'redux/reducers/chosenLocation.reducer';
 
 
 export const getReduxState = () =>{

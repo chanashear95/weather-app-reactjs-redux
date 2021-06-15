@@ -3,7 +3,7 @@ import { useState } from 'react';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { local_favorites_key } from '../../../environments';
+import { local_favorites_key } from 'environments';
 
 function FavoriteButton(props) {
 

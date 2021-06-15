@@ -1,4 +1,4 @@
-import { weather_env, proxy_url } from '../environments';
+import { weather_env, proxy_url } from 'environments';
 
 export const searchAutoComplete = async (searchText) => {
     return await fetch(`${proxy_url}${weather_env.base_url}/locations/v1/cities/autocomplete?apikey=${weather_env.api_key}&q=${searchText}`, {

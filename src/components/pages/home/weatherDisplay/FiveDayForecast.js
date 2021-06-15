@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getFiveDayForecastByLocationKey } from '../../../../services/weather.service'; 
-import { WEATHER_OPTIONS } from '../../../../environments';
-import ErrorMsg from '../../../global/error_message/ErrorMsg';
-import { convertFahrenheitToCelcius } from '../../../../functions/temperature';
-import Loading from '../../../global/loading/Loading';
+import { getFiveDayForecastByLocationKey } from 'services/weather.service'; 
+import { WEATHER_OPTIONS } from 'environments';
+import ErrorMsg from 'components/global/error_message/ErrorMsg';
+import { convertFahrenheitToCelcius } from 'functions/temperature';
+import Loading from 'components/global/loading/Loading';
 
 function FiveDayForecast(props) {
 

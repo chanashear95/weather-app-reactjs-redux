@@ -1,4 +1,4 @@
-import FavoritesList from "./FavoritesList";
+import FavoritesList from "components/pages/favorites/FavoritesList";
 
 function FavoritesPage(){
     return(

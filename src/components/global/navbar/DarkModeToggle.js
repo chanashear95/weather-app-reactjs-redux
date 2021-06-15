@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Switch from '@material-ui/core/Switch';
-import { getReduxState, setDarkMode, setLightMode } from '../../../redux/redux.service';
+import { getReduxState, setDarkMode, setLightMode } from 'redux/redux.service';
 
 function DarkModeToggle() {
 

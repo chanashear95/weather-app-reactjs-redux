@@ -1,11 +1,11 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import { getCurrentConditionsByLocationKey } from "../../../services/weather.service";
-import { setCurrentLocation } from '../../../redux/redux.service';
-import { WEATHER_OPTIONS } from '../../../environments';
-import ErrorMsg from '../../global/error_message/ErrorMsg';
-import FavoriteButton from "../../global/favorite_button/FavoriteButton";
-import Loading from '../../global/loading/Loading';
+import { getCurrentConditionsByLocationKey } from "services/weather.service";
+import { setCurrentLocation } from 'redux/redux.service';
+import { WEATHER_OPTIONS } from 'environments';
+import ErrorMsg from 'components/global/error_message/ErrorMsg';
+import FavoriteButton from "components/global/favorite_button/FavoriteButton";
+import Loading from 'components/global/loading/Loading';
 
 function FavoriteCityBox(props) {
 

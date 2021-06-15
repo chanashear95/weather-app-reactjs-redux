@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { local_favorites_key } from '../../../environments';
-import FavoriteCityBox from './FavoriteCityBox';
-import graphics from '../../../images/no_favorites_graphics.png';
+import { local_favorites_key } from 'environments';
+import FavoriteCityBox from 'components/pages/favorites/FavoriteCityBox';
+import graphics from 'images/no_favorites_graphics.png';
 import { Link } from 'react-router-dom';
 
 function FavoritesList() {

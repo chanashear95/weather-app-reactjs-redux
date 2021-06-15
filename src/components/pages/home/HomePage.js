@@ -1,5 +1,5 @@
-import SearchInput from "./search/SearchInput";
-import WeatherDisplay from './weatherDisplay/WeatherDisplay';
+import SearchInput from "components/pages/home/search/SearchInput";
+import WeatherDisplay from 'components/pages/home/weatherDisplay/WeatherDisplay';
 
 function HomePage(){
 

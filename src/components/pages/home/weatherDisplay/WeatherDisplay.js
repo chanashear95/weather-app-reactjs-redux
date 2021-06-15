@@ -1,12 +1,12 @@
 import { useEffect, useState, Fragment } from 'react';
-import { getCurrentConditionsByLocationKey } from '../../../../services/weather.service';
-import { getReduxState } from '../../../../redux/redux.service';
-import { local_favorites_key, WEATHER_OPTIONS } from '../../../../environments';
+import { getCurrentConditionsByLocationKey } from 'services/weather.service';
+import { getReduxState } from 'redux/redux.service';
+import { local_favorites_key, WEATHER_OPTIONS } from 'environments';
 
-import FiveDayForecast from './FiveDayForecast';
-import ErrorMsg from '../../../global/error_message/ErrorMsg';
-import FavoriteButton from '../../../global/favorite_button/FavoriteButton';
-import Loading from '../../../global/loading/Loading';
+import FiveDayForecast from 'components/pages/home/weatherDisplay/FiveDayForecast';
+import ErrorMsg from 'components/global/error_message/ErrorMsg';
+import FavoriteButton from 'components/global/favorite_button/FavoriteButton';
+import Loading from 'components/global/loading/Loading';
 
 function WeatherDisplay() {
 

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
-import { searchAutoComplete } from '../../../../services/weather.service';
-import { setCurrentLocation } from '../../../../redux/redux.service';
+import { searchAutoComplete } from 'services/weather.service';
+import { setCurrentLocation } from 'redux/redux.service';
 
-import ErrorMsg from '../../../global/error_message/ErrorMsg';
-import Loading from '../../../global/loading/Loading';
+import ErrorMsg from 'components/global/error_message/ErrorMsg';
+import Loading from 'components/global/loading/Loading';
 
 function SearchInput() {
 

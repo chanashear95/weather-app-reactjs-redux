@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import DarkModeToggle from './DarkModeToggle';
+import DarkModeToggle from 'components/global/navbar/DarkModeToggle';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
