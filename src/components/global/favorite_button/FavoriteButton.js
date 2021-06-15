@@ -41,7 +41,7 @@ function FavoriteButton(props) {
     }
 
     return (
-        <div>
+        <div style={{zIndex: 10}}>
             {props.isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
                 <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
 

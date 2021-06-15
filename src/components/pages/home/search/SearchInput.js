@@ -9,14 +9,7 @@ import Loading from 'components/global/loading/Loading';
 function SearchInput() {
 
     const [locationSuggestions, setLocationSuggestions] = useState([
-        // {
-        //     city: "Hong Kong", country: "Hong Kong", key: "1123655",
-        // },
-        // { city: "Hefei", country: "China", key: "101841" },
-        // {
-        //     city: "Hong Kong", country: "Hong Kong", key: "1123655",
-        // },
-        // { city: "Hefei", country: "China", key: "101841" }
+
 
     ]);
     const [err, setErr] = useState(null);
@@ -52,24 +45,25 @@ function SearchInput() {
             name: location_name,
             location_key: location_key,
         }
+        console.log(locationObj)
         setCurrentLocation(locationObj);
     }
 
     const handleSearchBlur = () => {
-        setErr(null);
-        setLocationSuggestions([]);
+        // setErr(null);
+        // setLocationSuggestions([]);
     }
 
     return (
         <div className={locationSuggestions.length > 0 || err ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
-            <input value={searchText} id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
+            <input autocomplete="off" value={searchText} id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 || err || loading ?
                 <div className="autocomplete-container w-100">
                     {err ? <div className="text-center"><ErrorMsg err={err} /> </div> : loading ? <Loading /> :
                         locationSuggestions.map(location => {
                             return (
                                 <p className="suggestion-item clickable"
-                                    onClick={() => handleSelectedLocation(location.key, location.name)}
+                                    onClick={() => handleSelectedLocation(location.location_key, location.city)}
                                     key={location.location_key}>
                                     {location.city}, {location.country}
                                 </p>

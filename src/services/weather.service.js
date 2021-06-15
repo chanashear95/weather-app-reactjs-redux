@@ -1,7 +1,8 @@
 import { weather_env, proxy_url } from 'environments';
 
 export const searchAutoComplete = async (searchText) => {
-    return await fetch(`${proxy_url}${weather_env.base_url}/locations/v1/cities/autocomplete?apikey=${weather_env.api_key}&q=${searchText}`, {
+    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/autocomplete?apikey=${weather_env.api_key}&q=${searchText}`);
+    return await fetch(`${proxy_url}${encodedUrl}`, {
         method: "GET",
         headers: {
             'Content-Type' : 'application/json',
@@ -9,6 +10,7 @@ export const searchAutoComplete = async (searchText) => {
     }).then(async res => {
         if(res.status == 200){
             return await res.json().then(data => {
+                if(!data.Code){
                 let suggestedLocations = [];
                 data.map(location => {
                     suggestedLocations.push(
@@ -20,6 +22,10 @@ export const searchAutoComplete = async (searchText) => {
                     )
                 })
                 return suggestedLocations;
+            }
+            else{
+                return false; // bakashot
+            }
             });
         }
         else{
@@ -29,7 +35,8 @@ export const searchAutoComplete = async (searchText) => {
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
-    return await fetch(`${proxy_url}${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`, {
+    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`);
+    return await fetch(`${proxy_url}${encodedUrl}`, {
         method: 'GET',
         headers: {
             'Content-Type' : 'application/json'
@@ -37,7 +44,12 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
     }).then(res => {
         if(res.status == 200){
             return res.json().then(data => {
-                return data;
+                if(data.Code){
+                return  false; //no more bakashot
+                }
+                else{
+                    return data[0]; 
+                }
             })
         }
         else{
@@ -47,7 +59,8 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
 }
 
 export const getFiveDayForecastByLocationKey = async (location_key) => {
-    return await fetch(`${proxy_url}${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`, {
+    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`);
+    return await fetch(`${proxy_url}${encodedUrl}`, {
         method: "GET",
         headers: {
             "Content-Type" : 'application/json'
@@ -55,7 +68,13 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
     }).then(res => {
         if(res.status == 200){
             return res.json().then(data => {
+                if(data){
+                    console.log(data)
                 return data;
+                }
+                else{
+                    return false; //no more bakashot
+                }
             })
         }
         else{
