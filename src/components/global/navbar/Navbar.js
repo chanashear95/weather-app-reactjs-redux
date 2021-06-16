@@ -3,7 +3,7 @@ import DarkModeToggle from 'components/global/navbar/DarkModeToggle';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-function Navbar(props) {
+function Navbar() {
 
     const navLinks = [
         {
@@ -30,7 +30,7 @@ function Navbar(props) {
                 {navLinks.map(link => {
                     return (
                         <div className="padding-h-20 nav-item">
-                            <Link onClick={props.refresh} className={window.location.pathname == link.inner_url ? "active" : ""} to={link.inner_url}>
+                            <Link to={link.inner_url}>
                                 {window.innerWidth < 500 ? link.icon : link.title}
                             </Link>
                         </div>

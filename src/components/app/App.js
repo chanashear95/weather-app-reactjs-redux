@@ -24,7 +24,6 @@ function App() {
 
   const [darkModeOn, setDarkModeOn] = useState(false)
   const [isLocationSet, setIsLocationSet] = useState(false);
-  const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -61,15 +60,11 @@ function App() {
     setIsLocationSet(true);
   }
 
-  const refreshComponents = () => {
-    setTime(Date.now());
-  }
-
   return (
     <div className={darkModeOn ? 'app-darkmode' : ''}>
       {!isLocationSet ? <div className="full-page-load"> <Loading /> </div> :
         <Router>
-          <Navbar key={'nav' + time} refresh={refreshComponents} />
+          <Navbar />
           <Route exact path="/" render={() => <HomePage />} />
           <Route exact path="/favorites" render={() => <FavoritesPage />} />
         </Router>

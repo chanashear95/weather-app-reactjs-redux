@@ -24,7 +24,3 @@
 .navbar .nav-item:hover{
     transform: translateY(-5px);
 }
-
-.nav-item .active {
-    text-decoration: underline;
-}
