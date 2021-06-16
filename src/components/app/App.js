@@ -26,19 +26,21 @@ function App() {
   const [isLocationSet, setIsLocationSet] = useState(false);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      if (pos.coords) {
-        await getLocationByCoordinates(pos.coords);
-      }
-      else {
-        initDefaultLocation();
-      }
-    })
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getCoords, initDefaultLocation);
+    }
+    else {
+      initDefaultLocation();
+    }
     store.subscribe(() => {
       let reduxState = getReduxState();
       setDarkModeOn(reduxState.darkMode);
     })
   })
+
+  const getCoords = async (res) => {
+    await getLocationByCoordinates(res.coords);
+  }
 
   const getLocationByCoordinates = async (coords) => {
     let locationData = await getConditionsByGeoLocation(coords.latitude, coords.longitude);
