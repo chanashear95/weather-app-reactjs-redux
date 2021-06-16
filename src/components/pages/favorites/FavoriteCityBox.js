@@ -1,39 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+
 import { getCurrentConditionsByLocationKey } from "services/weather.service";
 import { setCurrentLocation } from 'redux/redux.service';
-import { WEATHER_OPTIONS } from 'environments';
+import { getWeatherIconByTime } from 'functions/dateAndTime';
+import { getWeatherIconFromWeatherText } from "functions/temperature";
+
+import moon from 'images/weatherIcons/moon.png';
+
 import ErrorMsg from 'components/global/error_message/ErrorMsg';
 import FavoriteButton from "components/global/favorite_button/FavoriteButton";
 import Loading from 'components/global/loading/Loading';
 
+
 function FavoriteCityBox(props) {
 
-    const [currentConditions, setCurrentConditions] = useState(null
-        // {
-        //     "LocalObservationDateTime": "2021-06-14T19:05:00+03:00",
-        //     "EpochTime": 1623686700,
-        //     "WeatherText": "Overcast",
-        //     "WeatherIcon": 1,
-        //     "HasPrecipitation": false,
-        //     "PrecipitationType": null,
-        //     "IsDayTime": true,
-        //     "Temperature": {
-        //         "Metric": {
-        //             "Value": 25.1,
-        //             "Unit": "C",
-        //             "UnitType": 17
-        //         },
-        //         "Imperial": {
-        //             "Value": 77,
-        //             "Unit": "F",
-        //             "UnitType": 18
-        //         }
-        //     },
-        //     "MobileLink": "http://m.accuweather.com/en/tr/alanya/316940/current-weather/316940?lang=en-us",
-        //     "Link": "http://www.accuweather.com/en/tr/alanya/316940/current-weather/316940?lang=en-us"
-        // }
-    );
+    const [currentConditions, setCurrentConditions] = useState(null);
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState('09:30')
     const [loading, setLoading] = useState(true);
@@ -41,9 +23,15 @@ function FavoriteCityBox(props) {
     useEffect(async () => {
         let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
         if (currentConditions) {
-            setCurrentConditions(currentConditions)
-            let localTime = currentConditions.LocalObservationDateTime.slice(11, 16);
-            setLocalTime(localTime);
+            if (currentConditions !== 'max limit') {
+                setCurrentConditions(currentConditions)
+                let localTime = currentConditions.LocalObservationDateTime.slice(11, 16);
+                setLocalTime(localTime);
+            }
+            else {
+                let err = 'API has reached its daily limit.';
+                setErr(err);
+            }
         }
         else {
             let err = 'Could not display weather. Please try again.';
@@ -52,7 +40,7 @@ function FavoriteCityBox(props) {
         setLoading(false);
     }, [])
 
-    const updateCurrentLocation = () => {
+    const handleClickLocation = () => {
         setCurrentLocation(props.favorite);
     }
 
@@ -61,27 +49,38 @@ function FavoriteCityBox(props) {
     }
 
     return (
-            <div className={Number(localTime.slice(0, 2)) >= 5 && Number(localTime.slice(0, 2)) < 12 ? "favorite-card flex-col fade-in relative morning-weather"
-                :
-                Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "favorite-card flex-col fade-in relative afternoon-weather" :
-                    "favorite-card flex-col fade-in relative night-weather"
-            }>
-              
-{err || loading ? "" : <FavoriteButton refreshFavorites={refreshFavorites} isFavorite={true} location={{name: props.favorite.name, location_key: props.favorite.location_key}}/>}
-        <Link onClick={updateCurrentLocation} to="/">
+        <div className={`favorite-card flex-col fade-in relative ${getWeatherIconByTime(localTime)}-weather`}>
+
+            {err || loading ? "" :
+                <FavoriteButton
+                    refreshFavorites={refreshFavorites}
+                    isFavorite={true}
+                    location={{ name: props.favorite.name, location_key: props.favorite.location_key }}
+                />
+            }
+
+            <Link onClick={handleClickLocation} to="/">
                 <div className="purple-overlay"></div>
 
-                
-                {err ?<div className="center error"> <ErrorMsg err={err} /> </div> : loading ?  <Loading /> :
-                    <div className="text-center">
-                        <p className="favorite-city-title">{props.favorite.name}</p>
-                        <img className="weather-icon" src={WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText) ? WEATHER_OPTIONS.find(i => i.title == currentConditions.WeatherText).icon : ""} />
-                        <p>{currentConditions.WeatherText}</p>
-                        <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
-                    </div>
+                {
+                    err ?
+                        <div className="center error"> <ErrorMsg err={err} /> </div> :
+                        loading ?
+                            <Loading />
+                            :
+                            <div className="text-center">
+                                <p className="favorite-city-title">{props.favorite.name}</p>
+                                {getWeatherIconByTime(localTime) == 'night' ?
+                                    <img src={moon} className="weather-icon" /> :
+                                    <img className="weather-icon" src={getWeatherIconFromWeatherText(currentConditions.WeatherText)} />
+                                }
+                                <p>{currentConditions.WeatherText}</p>
+                                <p className="favorite-temeperature">{currentConditions.Temperature.Imperial.Value} F° / {currentConditions.Temperature.Metric.Value} C°</p>
+                            </div>
                 }
-                        </Link>       
-            </div>
+            </Link>
+
+        </div>
     )
 }
 

@@ -2,17 +2,17 @@
     padding-left: 40px;;
 }
 
-.toggle.active .MuiSwitch-switchBase{
-    color: #545686;
-}
-
 .toggle .MuiSwitch-switchBase{
     color: #fff;
 }
 
+.toggle.active .MuiSwitch-switchBase{
+    color: #545686;
+}
+
 .dark-mode-text{
-    font-size: 10px;
     margin: 0;
+    font-size: 10px;
 }
 
 .app-darkmode .dark-mode-text{

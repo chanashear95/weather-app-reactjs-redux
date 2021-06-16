@@ -19,6 +19,10 @@ input:focus{
     border: 1px solid rgb(247 170 61);
 }
 
+.app-darkmode p{
+    color: #fff
+}
+
 /* Global */
 .flex-row-c{
     display: flex;
@@ -72,8 +76,8 @@ input:focus{
 }
 
 .page-content-container{
-    padding: 50px;
     min-height: 100vh;
+    padding: 50px;
     padding-top: 80px;
     background-color: #fafafa;
 }
@@ -110,19 +114,6 @@ input:focus{
     grid-row-gap: 20px;
 }
 
-.app-darkmode p{
-    color: #fff
-}
-
-.purple-btn{
-    background: #545686;
-    padding: 12px 20px;
-    border-radius: 10px;
-    border: none;
-    color: #fff;
-    transition: .2s ease-in-out all;
-}
-
 .purple-btn:hover{
     background-color: #7274af;
 }
@@ -131,9 +122,9 @@ input:focus{
 .fade-in{
 -webkit-animation: fadein 2s; 
 -moz-animation: fadein 2s; 
- -ms-animation: fadein 2s; 
-  -o-animation: fadein 2s; 
-     animation: fadein 2s;
+-ms-animation: fadein 2s; 
+-o-animation: fadein 2s; 
+animation: fadein 2s;
 }
 
 @keyframes fadein {

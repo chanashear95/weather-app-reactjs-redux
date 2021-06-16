@@ -1,48 +1,30 @@
+.favorites-list a {
+    width: inherit;
+    height: inherit;
+    display: inline-block;
+}
+
 .favorite-card{
+    align-items: center;
+    justify-content: center;
     width: 250px;
     height: 300px;
     border-radius: 20px;
     padding: 20px;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+    margin: 0 auto;
     box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
-    transition: .2s ease-in-out all;
     background-position-y: 40%;
     background-size: cover;
-    margin: 0 auto;
-}
-
-.favorite-card p {
     color: #fff;
+    transition: .2s ease-in-out all;
 }
 
 .app-darkmode .favorite-card{
     box-shadow:  0px 0px 25px rgb(255 255 255 / 30%);
 }
 
-.favorite-card .weather-icon{
-    width: 120px;
-}
-
 .favorite-card:hover{
     transform: translateY(-10px);
-}
-
-.favorite-city-title{
-    font-size: 24px;
-    width: auto;
-    z-index: 0;
-}
-
-.favorite-temperature{
-    font-size: 18px;
-}
-
-.MuiSkeleton-text{
-    transform: none !important;
-    border-radius: 20px !important;
-
 }
 
 .purple-overlay{
@@ -56,16 +38,29 @@
     left: 0;
 }
 
-.favorite-card p, .favorite-card img {
+.favorite-card p {
+    color: #fff;
+}
+
+.favorite-card p, .favorite-card .weather-icon {
     z-index: 1;
     position: relative;
 }
 
-.favorites-list a {
-    width: inherit;
-    height: inherit;
-    display: inline-block;
+.favorite-card .weather-icon{
+    width: 80px;
 }
+
+.favorite-city-title{
+    font-size: 24px;
+    width: auto;
+    z-index: 0;
+}
+
+.favorite-temperature{
+    font-size: 18px;
+}
+
 .favorite-card div.error p{
     z-index: 1;
     position: absolute;

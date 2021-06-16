@@ -1,8 +1,7 @@
 import { useEffect, useState, Fragment } from 'react';
 import { local_favorites_key } from 'environments';
-import FavoriteCityBox from 'components/pages/favorites/FavoriteCityBox';
 import graphics from 'images/no_favorites_graphics.png';
-import { Link } from 'react-router-dom';
+import FavoriteCityBox from 'components/pages/favorites/FavoriteCityBox';
 
 function FavoritesList() {
 
@@ -21,23 +20,18 @@ function FavoritesList() {
 
     return (
         <Fragment>
-            {favorites.length < 1 ?
-                <div className='text-center'>
-                    <p> You have not added any cities to your favorites list yet. </p>
-                    <img style={{ width: 100 }} src={graphics} />
-                    <div className="text-center">
-                        <Link to="/">
-                            <button className="purple-btn clickable">Back Home</button>
-                        </Link>
-                    </div>
-                </div>
-                :
+            {favorites.length > 0 ?
                 <div className="favorites-list grid-4-col">
                     {favorites.map(favorite => {
                         return (
                             <FavoriteCityBox getFavorites={getFavorites} favorite={favorite} />
                         )
                     })}
+                </div>
+                :
+                <div className='text-center'>
+                    <p> You have not added any cities to your favorites list yet. </p>
+                    <img style={{ width: 100 }} src={graphics} />
                 </div>
             }
         </Fragment>

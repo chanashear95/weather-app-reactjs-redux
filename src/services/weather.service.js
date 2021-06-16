@@ -24,14 +24,14 @@ export const searchAutoComplete = async (searchText) => {
                 return suggestedLocations;
             }
             else{
-                return false; // bakashot
+                return 'max limit';
             }
             });
         }
         else{
             return false;
         }
-    }).catch(e => console.log(e));
+    }).catch(e => false);
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
@@ -45,7 +45,7 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
         if(res.status == 200){
             return res.json().then(data => {
                 if(data.Code){
-                return  false; //no more bakashot
+                return 'max limit';
                 }
                 else{
                     return data[0]; 
@@ -72,7 +72,7 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
                 return data;
                 }
                 else{
-                    return false; //no more bakashot
+                    return 'max limit';
                 }
             })
         }
@@ -96,12 +96,12 @@ export const getConditionsByGeoLocation = async (lat, long) => {
                 return data;
                 }
                 else{
-                    return false; //bakashot
+                    return 'max limit';
                 }
             })
         }
         else{
             return false;
         }
-    }).catch(e => console.log(e))
+    }).catch(e => false)
 }

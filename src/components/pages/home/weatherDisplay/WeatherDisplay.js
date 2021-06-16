@@ -1,45 +1,71 @@
 import { useEffect, useState, Fragment } from 'react';
+
+import { convertMilitaryTimeTo12Hour, getWeatherIconByTime } from 'functions/dateAndTime';
+import { getWeatherIconFromWeatherText } from 'functions/temperature';
 import { getCurrentConditionsByLocationKey } from 'services/weather.service';
 import { getReduxState } from 'redux/redux.service';
-import { local_favorites_key, WEATHER_OPTIONS } from 'environments';
+import store from 'redux/redux'
+import { local_favorites_key } from 'environments';
+
 import moon from 'images/weatherIcons/moon.png';
+
 import FiveDayForecast from 'components/pages/home/weatherDisplay/FiveDayForecast';
 import ErrorMsg from 'components/global/error_message/ErrorMsg';
 import FavoriteButton from 'components/global/favorite_button/FavoriteButton';
 import Loading from 'components/global/loading/Loading';
-import store from 'redux/redux'
-import { convertMilitaryTimeTo12Hour } from 'functions/dateAndTime';
+
 function WeatherDisplay() {
 
-    const [selectedLocationCurrentConditions, setSelectedLocationCurrentConditions] = useState(null
-    );
+    const [selectedLocationCurrentConditions, setSelectedLocationCurrentConditions] = useState(null);
     const [metricTemperature, setMetricTemperature] = useState(true);
     const [isFavorite, setFavorite] = useState(false);
-    const [err, setErr] = useState('');
+    const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [reduxTempState, setReduxTempState] = useState(null);
+    const [reduxTempCompareState, setReduxTempCompareState] = useState(null);
 
     useEffect(async () => {
-        console.log('hi')
         let reduxState = getReduxState();
-        store.subscribe(async () => {
-            let updatedState = getReduxState();
-            setReduxTempState(updatedState.chosenLocation);
-        })
         await getSelectedLocationCurrentConditions(reduxState.chosenLocation);
         checkIfLocationIsFavorite(reduxState.chosenLocation.location_key);
+        store.subscribe(async () => {
+            let updatedState = getReduxState();
+            setReduxTempCompareState(updatedState.chosenLocation);
+        })
     }, [])
 
     useEffect(async () => {
         if (selectedLocationCurrentConditions) {
-            if (reduxTempState.location_key !== selectedLocationCurrentConditions.location_key) {
+            if (reduxTempCompareState.location_key !== selectedLocationCurrentConditions.location_key) {
                 setLoading(true);
-                await getSelectedLocationCurrentConditions(reduxTempState);
-                checkIfLocationIsFavorite(reduxTempState.location_key);
+                await getSelectedLocationCurrentConditions(reduxTempCompareState);
+                checkIfLocationIsFavorite(reduxTempCompareState.location_key);
             }
         }
-    }, [reduxTempState])
+    }, [reduxTempCompareState])
+
+    const getSelectedLocationCurrentConditions = async (locationObj) => {
+        let currentConditions = await getCurrentConditionsByLocationKey(locationObj.location_key);
+        if (currentConditions) {
+            if (currentConditions !== 'max limit') {
+                currentConditions.location_key = locationObj.location_key;
+                currentConditions.name = locationObj.name;
+                setSelectedLocationCurrentConditions(currentConditions);
+                setReduxTempCompareState(currentConditions);
+                setLocalTime(currentConditions.LocalObservationDateTime.slice(11, 16));
+                setLoading(false)
+            }
+            else {
+                let err = 'API has reached its daily limit.';
+                setErr(err);
+            }
+        }
+        else {
+            let err = "An error occurred. Please try again to see the forecast.";
+            setErr(err);
+            setLoading(false);
+        }
+    }
 
     const checkIfLocationIsFavorite = (location_key) => {
         if (window.localStorage.getItem(local_favorites_key)) {
@@ -53,30 +79,9 @@ function WeatherDisplay() {
         }
     }
 
-    const getSelectedLocationCurrentConditions = async (locationObj) => {
-        let currentConditions = await getCurrentConditionsByLocationKey(locationObj.location_key);
-        if (currentConditions) {
-            console.log(currentConditions)
-            currentConditions.location_key = locationObj.location_key;
-            currentConditions.name = locationObj.name;
-            setSelectedLocationCurrentConditions(currentConditions);
-            setReduxTempState(currentConditions);
-            setLocalTime(currentConditions.LocalObservationDateTime.slice(11, 16));
-            setLoading(false)
-        }
-        else {
-            let err = "An error occurred. Please try again to see the forecast.";
-            setErr(err);
-            setLoading(false);
-        }
-    }
+    const toggleTemperatureFormat = () => {
+        setMetricTemperature(prevFormat => !prevFormat);
 
-    const switchToFahrenheit = () => {
-        setMetricTemperature(false);
-    }
-
-    const switchToMetric = () => {
-        setMetricTemperature(true);
     }
 
     return (
@@ -87,56 +92,51 @@ function WeatherDisplay() {
                 }
                 else {
                     return (
-                        <div
-                            className={!localTime ? "weather-display-container relative morning-weather" : Number(localTime.slice(0, 2)) >= 5 && Number(localTime.slice(0, 2)) < 12 ? "weather-display-container relative morning-weather"
-                                : Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "weather-display-container relative afternoon-weather"
-                                    : "weather-display-container relative night-weather"
-                            }
-
-                        >
-
-
-                            {err ? <ErrorMsg err={err} /> :
-                                <Fragment>
-                                    <FavoriteButton refreshFavorites={checkIfLocationIsFavorite} isFavorite={isFavorite} location={{ name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key }} />
-                                    <div className="location-info-display">
-                                        <div className="flex-row-start">
-                                            <p className="chosen-location-title">{selectedLocationCurrentConditions.name}</p>
-                                            {Number(localTime.slice(0, 2)) >= 20 && Number(localTime.slice(0, 2)) < 5 ? <img src={moon} className="weather-icon fade-in" /> :
-                                                <img className="weather-icon fade-in" src={WEATHER_OPTIONS.find(i => selectedLocationCurrentConditions.WeatherText.toLowerCase().includes(i.title.toLowerCase())) ? WEATHER_OPTIONS.find(i => selectedLocationCurrentConditions.WeatherText.toLowerCase().includes(i.title.toLowerCase())).icon : ""} />
-                                            }
+                        <div className={`weather-display-container relative ${getWeatherIconByTime(localTime)}-weather`}>
+                            {
+                                err ?
+                                    <ErrorMsg err={err} /> :
+                                    <Fragment>
+                                        <FavoriteButton
+                                            refreshFavorites={checkIfLocationIsFavorite}
+                                            isFavorite={isFavorite}
+                                            location={{ name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key }}
+                                        />
+                                        <div className="location-info-display">
+                                            <div className="flex-row-start">
+                                                <p className="chosen-location-title">{selectedLocationCurrentConditions.name}</p>
+                                                {
+                                                    getWeatherIconByTime(localTime) == 'night' ? <img src={moon} className="weather-icon fade-in" /> :
+                                                        <img className="weather-icon fade-in" src={getWeatherIconFromWeatherText(selectedLocationCurrentConditions.WeatherText)} />
+                                                }
+                                            </div>
+                                            <p>{new Date(selectedLocationCurrentConditions.LocalObservationDateTime).toString().slice(0, 15)}</p>
+                                            <p>{convertMilitaryTimeTo12Hour(localTime)}
+                                                <small>{Number(localTime.slice(0, 2)) >= 12 ? "P.M" : 'A.M'}</small>
+                                            </p>
+                                            <p style={{ fontSize: 18 }} className="fade-in">
+                                                Good {getWeatherIconByTime(localTime)}
+                                            </p>
                                         </div>
-                                        <p>{new Date(selectedLocationCurrentConditions.LocalObservationDateTime).toString().slice(0,15)}</p>
-                                        <p>{convertMilitaryTimeTo12Hour(localTime)} <small>{Number(localTime.slice(0, 2)) >= 12 ? "P.M" : 'A.M'}</small></p>
-                                        <p style={{ fontSize: 18 }} className="fade-in">
-                                            {Number(localTime.slice(0, 2)) >= 5 && Number(localTime.slice(0, 2)) < 12 ? "Good Morning"
-                                                : Number(localTime.slice(0, 2)) >= 12 && Number(localTime.slice(0, 2)) < 20 ? "Good Afternoon" :
-                                                    "Good Night"
-                                            }
-                                        </p>
 
-                                    </div>
-
-                                    <div className="text-center current-conditions-container">
-                                        <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
-                                        <p className="current-conditions-degrees">
-                                            {metricTemperature ?
-                                                parseInt(selectedLocationCurrentConditions.Temperature.Metric.Value) + '° C'
-                                                :
-                                                parseInt(selectedLocationCurrentConditions.Temperature.Imperial.Value) + '° F'
-                                            }
-                                        </p>
-                                        <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={switchToFahrenheit}>F°</span><span>|</span>
-                                <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={switchToMetric}>C°</span>
-                                    </div>
-                                </Fragment>
+                                        <div className="text-center current-conditions-container">
+                                            <p className="current-conditions-text">{selectedLocationCurrentConditions.WeatherText}</p>
+                                            <p className="current-conditions-degrees">
+                                                {metricTemperature ?
+                                                    parseInt(selectedLocationCurrentConditions.Temperature.Metric.Value) + '° C'
+                                                    :
+                                                    parseInt(selectedLocationCurrentConditions.Temperature.Imperial.Value) + '° F'
+                                                }
+                                            </p>
+                                            <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={toggleTemperatureFormat}>F°</span>
+                                            <span>|</span>
+                                            <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={toggleTemperatureFormat}>C°</span>
+                                        </div>
+                                    </Fragment>
                             }
-                            {selectedLocationCurrentConditions ?
-                                <div className="five-day-forecast-container">
-                                    <FiveDayForecast metricTemperature={metricTemperature} selectedLocationKey={selectedLocationCurrentConditions.location_key} />
-                                </div>
-                                : ""}
-
+                            <div className="five-day-forecast-container">
+                                <FiveDayForecast metricTemperature={metricTemperature} selectedLocationKey={selectedLocationCurrentConditions.location_key} />
+                            </div>
                         </div>
                     )
                 }

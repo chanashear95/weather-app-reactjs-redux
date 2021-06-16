@@ -1,41 +1,44 @@
 .weather-display-container{
     flex: 2;
-    border-radius: 20px;
-    padding: 20px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
-    overflow: hidden;
-    min-height: 550px;
-    max-width: 1500px;
-    margin: 0 auto;
     width: 100%;
+    max-width: 1500px;
+    min-height: 550px;
+    padding: 20px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
+    background-repeat: no-repeat;
+    background-size: cover;    
 }
 
 .app-darkmode .weather-display-container{
     box-shadow: 0px 0px 25px rgb(255 255 255 / 30%);
 }
 
+.weather-display-container .MuiAlert-standardSuccess.added-favorites-msg {
+    background-color: rgb(155 230 68);
+}
+
+.weather-display-container .MuiAlert-standardSuccess.removed-favorites-msg {
+    background-color: rgb(247 170 61);
+}
+
 .weather-display-container p {
-    /* text-shadow: 0px 0px 8px rgb(0 0 0); */
     color: #535686;
 }
 
-.five-day-forecast-container{
-    background: rgba(7, 12, 61, .7);
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    padding: 10px 25px;
-    transition: 1s ease-in-out all;
-    transform: translateY(220px)
+.location-info-display .weather-icon{
+    width: 60px;
+    padding-left: 10px;
 }
 
-.five-day-forecast-container p {
-    color: #fff;
+.location-info-display p:first-of-type {
+    margin: 0;
+}
+
+.location-info-display p:nth-child(3){
+    margin-top: 5px;
 }
 
 .chosen-location-title{
@@ -68,18 +71,21 @@
     text-decoration: underline;
 }
 
-
-.location-info-display .weather-icon{
-    width: 60px;
-    padding-left: 10px;
+.five-day-forecast-container{
+    background: rgba(7, 12, 61, .7);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 10px 25px;
+    transition: 1s ease-in-out all;
+    transform: translateY(220px)
 }
 
-.location-info-display p:first-of-type {
-    margin: 0;
-}
-
-.location-info-display p:nth-child(3){
-    margin-top: 5px;
+.five-day-forecast-container p {
+    color: #fff;
 }
 
 .daily-forecast .weather-icon{
@@ -87,14 +93,6 @@
     margin: 0 auto;
     display: block;
     padding-bottom: 10px;
-}
-
-.weather-display-container .MuiAlert-standardSuccess.added-favorites-msg {
-    background-color: rgb(155 230 68);
-}
-
-.weather-display-container .MuiAlert-standardSuccess.removed-favorites-msg {
-    background-color: rgb(247 170 61);
 }
 
 .daily-forecast p {

@@ -1,8 +1,9 @@
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useState } from 'react';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
 import { local_favorites_key } from 'environments';
 
 function FavoriteButton(props) {
@@ -20,8 +21,10 @@ function FavoriteButton(props) {
         }
         if (props.isFavorite) {
             let favIdx = favorites.findIndex(i => i.location_key == props.location.location_key);
-            favorites.splice(favIdx, 1);
-            setShowRemovedFromFavoritesMessage(true);
+            if (favIdx !== -1) {
+                favorites.splice(favIdx, 1);
+                setShowRemovedFromFavoritesMessage(true);
+            }
         }
         else {
             favorites.push({ name: props.location.name, location_key: props.location.location_key });
@@ -41,20 +44,23 @@ function FavoriteButton(props) {
     }
 
     return (
-        <div style={{zIndex: 10}}>
-            {props.isFavorite ? <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" /> :
-                <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />}
+        <div style={{ zIndex: 10 }}>
+            {props.isFavorite ?
+                <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" />
+                :
+                <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />
+            }
 
-            <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={60000} onClose={closeAddedToFavoritesMessage}>
+            <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={6000} onClose={closeAddedToFavoritesMessage}>
                 <MuiAlert className="added-favorites-msg" onClose={closeAddedToFavoritesMessage} severity="success">
                     {props.location.name} has been added to favorites!
-                                        </MuiAlert>
+                </MuiAlert>
             </Snackbar>
 
-            <Snackbar open={showRemovedFromFavoritesMessage} autoHideDuration={60000} onClose={closeRemoveFromFavoritesMessage}>
+            <Snackbar open={showRemovedFromFavoritesMessage} autoHideDuration={6000} onClose={closeRemoveFromFavoritesMessage}>
                 <MuiAlert className="removed-favorites-msg" onClose={closeRemoveFromFavoritesMessage} severity="success">
                     {props.location.name} was removed from favorites!
-                                         </MuiAlert>
+                </MuiAlert>
             </Snackbar>
         </div>
     )

@@ -49,3 +49,5 @@ export const WEATHER_OPTIONS = [
         icon: snow
     }
 ]
+
+export const DEFAULT_WEATHER_ICON = overcast;

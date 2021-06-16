@@ -1,4 +1,3 @@
-
 export const darkModeActions = {
     setDarkMode: 'Dark_Mode',
     setLightMode:  'Light_Mode',

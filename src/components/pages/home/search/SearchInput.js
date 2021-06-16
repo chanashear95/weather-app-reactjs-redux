@@ -8,24 +8,29 @@ import Loading from 'components/global/loading/Loading';
 
 function SearchInput() {
 
-    const [locationSuggestions, setLocationSuggestions] = useState([
-
-
-    ]);
+    const [locationSuggestions, setLocationSuggestions] = useState([]);
     const [err, setErr] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSearchChange = async (e) => {
+        if (err) {
+            setErr(null);
+        }
         let searchText = e.target.value;
         searchText = searchText.replace(/[^A-Za-z|| ]/ig, '')
-        setErr(null);
         setSearchText(searchText);
         if (e.target.value && e.target.value != " ") {
             setLoading(true);
             let autoCompleteData = await searchAutoComplete(searchText);
             if (autoCompleteData) {
-                setLocationSuggestions(autoCompleteData);
+                if (autoCompleteData !== 'max limit') {
+                    setLocationSuggestions(autoCompleteData);
+                }
+                else {
+                    let err = 'API has reached its daily limit.';
+                    setErr(err);
+                }
             }
             else {
                 setLoading(false);
@@ -40,34 +45,39 @@ function SearchInput() {
     }, [locationSuggestions]);
 
     const handleSelectedLocation = (location_key, location_name) => {
-        setLocationSuggestions([]);
         let locationObj = {
             name: location_name,
             location_key: location_key,
         }
         setCurrentLocation(locationObj);
+        setSearchText('');
+        setLocationSuggestions([]);
     }
 
-    const handleSearchBlur = () => {
-        // setErr(null);
-        // setLocationSuggestions([]);
+    const handleCloseDropDown = (e) => {
+        setErr(null);
+        setLocationSuggestions([]);
     }
 
     return (
-        <div className={locationSuggestions.length > 0 || err ? "flex-col search-container relative autocomplete-open" : "flex-col search-container relative"}>
-            <input autocomplete="off" value={searchText} id="search" onBlur={handleSearchBlur} className="search-input" placeholder="Search..." onChange={handleSearchChange} />
+        <div className={`flex-col search-container relative ${locationSuggestions.length > 0 || err ? 'autocomplete-open' : ''}`}>
+            <input onClick={handleCloseDropDown} autoComplete={"off"} value={searchText} id="search" className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 || err || loading ?
                 <div className="autocomplete-container w-100">
-                    {err ? <div className="text-center"><ErrorMsg err={err} /> </div> : loading ? <Loading /> :
-                        locationSuggestions.map(location => {
-                            return (
-                                <p className="suggestion-item clickable"
-                                    onClick={() => handleSelectedLocation(location.location_key, location.city)}
-                                    key={location.location_key}>
-                                    {location.city}, {location.country}
-                                </p>
-                            )
-                        })
+                    {
+                        err ?
+                            <div className="text-center"><ErrorMsg err={err} /> </div> :
+                            loading ?
+                                <Loading /> :
+                                locationSuggestions.map(location => {
+                                    return (
+                                        <p className="suggestion-item clickable"
+                                            onClick={() => handleSelectedLocation(location.location_key, location.city)}
+                                            key={location.location_key}>
+                                            {location.city}, {location.country}
+                                        </p>
+                                    )
+                                })
                     }
                 </div>
                 : ""}

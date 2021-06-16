@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Switch from '@material-ui/core/Switch';
-import { getReduxState, setDarkMode, setLightMode } from 'redux/redux.service';
+
+import { getReduxState, setDarkModeRedux, setLightModeRedux } from 'redux/redux.service';
 
 function DarkModeToggle() {
 
@@ -12,15 +13,15 @@ function DarkModeToggle() {
     }, [])
 
     const handleDarkModeToggle = () => {
-        setDarkModeOn(prevState => !prevState);
+        setDarkModeOn(prevDarkMode => !prevDarkMode);
     }
 
     useEffect(() => {
         if (darkModeOn) {
-            setDarkMode();
+            setDarkModeRedux();
         }
         else {
-            setLightMode();
+            setLightModeRedux();
         }
     }, [darkModeOn])
 

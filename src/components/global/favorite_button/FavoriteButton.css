@@ -2,13 +2,10 @@
     position: absolute;
     right: 25px;
     top: 25px;
-    font-size: 35px !important;
     z-index: 1;
+    font-size: 35px !important;
 }
 
- .MuiSvgIcon-root {
-    fill: #535686;
-}
 
 .weather-display-container .MuiSvgIcon-root, .favorite-card .MuiSvgIcon-root{
     fill: #535686;

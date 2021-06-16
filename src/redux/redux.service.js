@@ -14,13 +14,13 @@ export const getReduxState = () =>{
     })
   }
 
-  export const setDarkMode = () =>{
+  export const setDarkModeRedux = () =>{
     store.dispatch({
       type: darkModeActions.setDarkMode,
     })
   }
 
-  export const setLightMode = () =>{
+  export const setLightModeRedux = () =>{
     store.dispatch({
       type: darkModeActions.setLightMode,
     })
