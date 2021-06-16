@@ -29,7 +29,7 @@ function Navbar() {
             <div className="flex-row-c">
                 {navLinks.map(link => {
                     return (
-                        <div className="padding-h-20 nav-item">
+                        <div key={link.id} className="padding-h-20 nav-item">
                             <Link to={link.inner_url}>
                                 {window.innerWidth < 500 ? link.icon : link.title}
                             </Link>

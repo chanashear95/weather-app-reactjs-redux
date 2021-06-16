@@ -24,7 +24,7 @@ function FavoritesList() {
                 <div className="favorites-list grid-4-col">
                     {favorites.map(favorite => {
                         return (
-                            <FavoriteCityBox getFavorites={getFavorites} favorite={favorite} />
+                            <FavoriteCityBox key={favorite.location_key} getFavorites={getFavorites} favorite={favorite} />
                         )
                     })}
                 </div>
