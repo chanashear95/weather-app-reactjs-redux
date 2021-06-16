@@ -118,4 +118,8 @@
     .location-info-display .weather-icon{
         width: 40px;
     }
+
+    .current-conditions-container p, .current-conditions-container span {
+        color: #fff;
+    }
 }
