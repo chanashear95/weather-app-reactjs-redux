@@ -1,14 +1,14 @@
 export const darkModeActions = {
-    setDarkMode: 'Dark_Mode',
-    setLightMode:  'Light_Mode',
+    setDarkMode: 'Set_Dark_Mode',
+    setLightMode:  'Set_Light_Mode',
 }
 
 const darkModeReducer = (state = false, action) => {
     switch (action.type) {
-        case "Dark_Mode":
+        case "Set_Dark_Mode":
             state = true;
             break;
-        case 'Light_Mode':
+        case 'Set_Light_Mode':
             state = false;
             break;
         default:

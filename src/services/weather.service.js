@@ -2,17 +2,18 @@ import { weather_env, proxy_url } from 'environments';
 
 export const searchAutoComplete = async (searchText) => {
     let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/autocomplete?apikey=${weather_env.api_key}&q=${searchText}`);
-    return await fetch(`${proxy_url}${encodedUrl}`, {
-        method: "GET",
-        headers: {
-            'Content-Type' : 'application/json',
-        }
-    }).then(async res => {
-        if(res.status == 200){
-            return await res.json().then(data => {
-                if(!data.Code){
+    try {
+        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (res.status === 200) {
+            let data = await res.json();
+            if (!data.Code) {
                 let suggestedLocations = [];
-                data.map(location => {
+                data.forEach(location => {
                     suggestedLocations.push(
                         {
                             city: location.LocalizedName,
@@ -23,85 +24,93 @@ export const searchAutoComplete = async (searchText) => {
                 })
                 return suggestedLocations;
             }
-            else{
+            else {
                 return 'max limit';
             }
-            });
         }
-        else{
-            return false;
-        }
-    }).catch(e => false);
+    }
+    catch (e) {
+        return false;
+    }
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
     let encodedUrl = encodeURIComponent(`${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`);
-    return await fetch(`${proxy_url}${encodedUrl}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type' : 'application/json'
-        }
-    }).then(res => {
-        if(res.status == 200){
-            return res.json().then(data => {
-                if(data.Code){
+    try {
+        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (res.status === 200) {
+            let data = await res.json();
+            if (data.Code) {
                 return 'max limit';
-                }
-                else{
-                    return data[0]; 
-                }
-            })
+            }
+            else {
+                return data[0];
+            }
         }
-        else{
+        else {
             return false;
         }
-    }).catch(e => false);
+    }
+    catch (e) {
+        return false;
+    }
 }
 
 export const getFiveDayForecastByLocationKey = async (location_key) => {
     let encodedUrl = encodeURIComponent(`${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`);
-    return await fetch(`${proxy_url}${encodedUrl}`, {
-        method: "GET",
-        headers: {
-            "Content-Type" : 'application/json'
-        }
-    }).then(res => {
-        if(res.status == 200){
-            return res.json().then(data => {
-                if(data){
+    try {
+        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        });
+        if (res.status === 200) {
+            let data = await res.json();
+            if (data) {
                 return data;
-                }
-                else{
-                    return 'max limit';
-                }
-            })
+            }
+            else {
+                return 'max limit';
+            }
         }
-        else{
+        else {
             return false;
         }
-    }).catch(e => false);
+    }
+    catch (e) {
+        return false;
+    }
 }
 
 export const getConditionsByGeoLocation = async (lat, long) => {
     let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/geoposition/search?apikey=${weather_env.api_key}&q=${lat}%2C%20${long}`);
-    return await fetch(`${proxy_url}${encodedUrl}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type' : 'application/json'
-        }
-    }).then(res => {
-        if(res.status == 200){
-            return res.json().then(data => {
-                if(!data.Code){
+    try{
+        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (res.status === 200) {
+            let data = await res.json();
+            if (!data.Code) {
                 return data;
-                }
-                else{
-                    return 'max limit';
-                }
-            })
+            }
+            else {
+                return 'max limit';
+            }
         }
         else{
             return false;
         }
-    }).catch(e => false)
+    }
+    catch(e){
+        return false;
+    }
 }

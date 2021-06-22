@@ -1,37 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { darkModeActionsCreator } from 'store/actionsConfig';
 import Switch from '@material-ui/core/Switch';
-
-import { getReduxState, setDarkModeRedux, setLightModeRedux } from 'redux/redux.service';
+import 'components/global/navbar/DarkModeToggle.css';
 
 function DarkModeToggle() {
 
-    const [darkModeOn, setDarkModeOn] = useState(false);
-
-    useEffect(() => {
-        let darkModeOn = getReduxState().darkMode;
-        setDarkModeOn(darkModeOn);
-    }, [])
+    const darkMode = useSelector(state => state.darkMode);
+    const dispatch = useDispatch();
+    const { turnDarkModeOn, turnDarkModeOff } = bindActionCreators(darkModeActionsCreator, dispatch);
 
     const handleDarkModeToggle = () => {
-        setDarkModeOn(prevDarkMode => !prevDarkMode);
-    }
-
-    useEffect(() => {
-        if (darkModeOn) {
-            setDarkModeRedux();
+        if(darkMode){
+            turnDarkModeOff();
         }
         else {
-            setLightModeRedux();
+            turnDarkModeOn();
         }
-    }, [darkModeOn])
+    }
 
     return (
         <div className="darkmode-toggle-container">
             <Switch
-                checked={darkModeOn}
+                checked={darkMode}
                 onChange={handleDarkModeToggle}
                 color="default"
-                className={darkModeOn ? 'toggle active' : 'toggle'}
+                className={darkMode ? 'toggle active' : 'toggle'}
             />
             <p className="dark-mode-text">Dark Mode</p>
         </div>

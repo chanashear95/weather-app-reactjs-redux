@@ -12,32 +12,41 @@ function FiveDayForecast(props) {
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(true)
 
-  useEffect(async () => {
-    await getSelectedLocationFiveDayForecast();
-    let forecastContainer = document.getElementsByClassName('five-day-forecast-container')[0];
-    if (forecastContainer) {
-      forecastContainer.style.transform = 'translateY(0px)';
-    }
-  }, [])
-
-  const getSelectedLocationFiveDayForecast = async () => {
-    let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
-    if (fiveDayForecast) {
-      if (fiveDayForecast !== 'max limit') {
-        setFiveDayForecast(fiveDayForecast);
-        setLoading(false)
+  useEffect(() => {
+    const getSelectedLocationFiveDayForecast = async () => {
+      let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
+      if (fiveDayForecast) {
+        if (fiveDayForecast !== 'max limit') {
+          setFiveDayForecast(fiveDayForecast);
+          setLoading(false)
+        }
+        else {
+          let err = 'API has reached its daily limit.';
+          setErr(err);
+        }
       }
       else {
-        let err = 'API has reached its daily limit.';
+        let err = 'An error occured. Please try again to see 5 day forecast.';
         setErr(err);
+        setLoading(false)
       }
     }
-    else {
-      let err = 'An error occured. Please try again to see 5 day forecast.';
-      setErr(err);
-      setLoading(false)
+    getSelectedLocationFiveDayForecast();
+  }, [props.selectedLocationKey]);
+
+  useEffect(()=>{
+    return () => setFiveDayForecast(null);
+  }, [])
+
+  useEffect(() => {
+    if (fiveDayForecast) {
+      let forecastContainer = document.getElementsByClassName('five-day-forecast-container')[0];
+      if (forecastContainer) {
+        forecastContainer.style.transform = 'translateY(0px)';
+      }
     }
-  }
+  }, [fiveDayForecast]);
+
 
   return (
     <div className="flex-between">
@@ -53,13 +62,12 @@ function FiveDayForecast(props) {
                   <p> <strong>High </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Maximum.Value) : forecast.Temperature.Maximum.Value}°</p>
                   <p> <strong>Low </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Minimum.Value) : forecast.Temperature.Minimum.Value}°</p>
                   <p>{forecast.Day.IconPhrase}</p>
-                  <img className="weather-icon fade-in" src={getWeatherIconFromWeatherText(forecast.Day.IconPhrase)} />
+                  <img alt={forecast.Day.IconPhrase} className="weather-icon fade-in" src={getWeatherIconFromWeatherText(forecast.Day.IconPhrase)} />
                 </div>
               )
             })}
     </div>
   )
 }
-
 
 export default FiveDayForecast;

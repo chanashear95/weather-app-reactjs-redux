@@ -1,7 +1,7 @@
 import { WEATHER_OPTIONS, DEFAULT_WEATHER_ICON } from 'environments';
 
 export const convertFahrenheitToCelcius = (degreesInFahrenheit) => {
-    return parseInt(degreesInFahrenheit - 32 * (5/9));
+    return parseInt((degreesInFahrenheit - 32) * (5/9));
 }
 
 export const getWeatherIconFromWeatherText = (weatherText) => { //Takes a string of weather description returns image url

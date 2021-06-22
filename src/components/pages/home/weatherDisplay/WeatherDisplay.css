@@ -24,7 +24,7 @@
     background-color: rgb(247 170 61);
 }
 
-.weather-display-container p {
+.weather-display-container p, .app-darkmode .weather-display-container p {
     color: #535686;
 }
 
@@ -84,7 +84,7 @@
     transform: translateY(220px)
 }
 
-.five-day-forecast-container p {
+.five-day-forecast-container p, .app-darkmode .five-day-forecast-container p {
     color: #fff;
 }
 

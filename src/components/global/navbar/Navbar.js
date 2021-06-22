@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import DarkModeToggle from 'components/global/navbar/DarkModeToggle';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import 'components/global/navbar/Navbar.css';
+import DarkModeToggle from 'components/global/navbar/DarkModeToggle';
 
 function Navbar() {
 
@@ -18,7 +19,7 @@ function Navbar() {
             icon: <FavoriteIcon />,
             inner_url: '/favorites'
         }
-    ]
+    ];
 
     return (
         <nav className="flex-between padding-h-20 navbar">

@@ -1,38 +1,32 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { favoritesActionsCreator } from 'store/actionsConfig';
+import { addToFavorites, removeFromFavorites, getFavorites } from 'services/favorites.service';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
-import { local_favorites_key } from 'environments';
+import 'components/global/favorite_button/FavoriteButton.css';
 
 function FavoriteButton(props) {
 
     const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
     const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
+    const dispatch = useDispatch();
+    const { updateFavorites } = bindActionCreators(favoritesActionsCreator, dispatch);
 
     const addOrRemoveFromFavorites = () => {
-        let favorites;
-        if (window.localStorage.getItem(local_favorites_key)) {
-            favorites = JSON.parse(window.localStorage.getItem(local_favorites_key));
-        }
-        else {
-            favorites = [];
-        }
         if (props.isFavorite) {
-            let favIdx = favorites.findIndex(i => i.location_key == props.location.location_key);
-            if (favIdx !== -1) {
-                favorites.splice(favIdx, 1);
-                setShowRemovedFromFavoritesMessage(true);
-            }
+            removeFromFavorites(props.location.location_key);
+            setShowRemovedFromFavoritesMessage(true);
         }
         else {
-            favorites.push({ name: props.location.name, location_key: props.location.location_key });
+            addToFavorites(props.location.name, props.location.location_key);
             setShowAddedToFavoritesMessage(true);
         }
-        favorites = JSON.stringify(favorites);
-        window.localStorage.setItem(local_favorites_key, favorites);
-        props.refreshFavorites(props.location.location_key);
+        let favorites = getFavorites();
+        updateFavorites(favorites);
     }
 
     const closeAddedToFavoritesMessage = () => {
@@ -45,10 +39,11 @@ function FavoriteButton(props) {
 
     return (
         <div style={{ zIndex: 10 }}>
-            {props.isFavorite ?
-                <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" />
-                :
-                <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />
+            {
+                props.isFavorite ?
+                    <FavoriteIcon onClick={addOrRemoveFromFavorites} className="favorite-btn clickable" />
+                    :
+                    <FavoriteBorderIcon className="favorite-btn clickable" onClick={addOrRemoveFromFavorites} />
             }
 
             <Snackbar open={showAddedToFavoritesMessage} autoHideDuration={6000} onClose={closeAddedToFavoritesMessage}>

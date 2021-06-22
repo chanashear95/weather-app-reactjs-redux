@@ -1,11 +1,9 @@
 import { useEffect, useState, Fragment } from 'react';
+import { useSelector } from 'react-redux';
 
 import { convertMilitaryTimeTo12Hour, getWeatherIconByTime } from 'functions/dateAndTime';
 import { getWeatherIconFromWeatherText } from 'functions/temperature';
 import { getCurrentConditionsByLocationKey } from 'services/weather.service';
-import { getReduxState } from 'redux/redux.service';
-import store from 'redux/redux'
-import { local_favorites_key } from 'environments';
 
 import moon from 'images/weatherIcons/moon.png';
 
@@ -14,74 +12,57 @@ import ErrorMsg from 'components/global/error_message/ErrorMsg';
 import FavoriteButton from 'components/global/favorite_button/FavoriteButton';
 import Loading from 'components/global/loading/Loading';
 
-function WeatherDisplay() {
+import 'components/pages/home/weatherDisplay/WeatherDisplay.css';
 
+function WeatherDisplay() {
+    
+    const favorites = useSelector(state => state.favorites);
+    const chosenLocation = useSelector(state => state.chosenLocation);
     const [selectedLocationCurrentConditions, setSelectedLocationCurrentConditions] = useState(null);
     const [metricTemperature, setMetricTemperature] = useState(true);
     const [isFavorite, setFavorite] = useState(false);
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [reduxTempCompareState, setReduxTempCompareState] = useState(null);
 
-    useEffect(async () => {
-        let reduxState = getReduxState();
-        await getSelectedLocationCurrentConditions(reduxState.chosenLocation);
-        checkIfLocationIsFavorite(reduxState.chosenLocation.location_key);
-        store.subscribe(async () => {
-            let updatedState = getReduxState();
-            setReduxTempCompareState(updatedState.chosenLocation);
-        })
-    }, [])
-
-    useEffect(async () => {
-        if (selectedLocationCurrentConditions) {
-            if (reduxTempCompareState.location_key !== selectedLocationCurrentConditions.location_key) {
-                setLoading(true);
-                await getSelectedLocationCurrentConditions(reduxTempCompareState);
-                checkIfLocationIsFavorite(reduxTempCompareState.location_key);
-            }
-        }
-    }, [reduxTempCompareState])
-
-    const getSelectedLocationCurrentConditions = async (locationObj) => {
-        let currentConditions = await getCurrentConditionsByLocationKey(locationObj.location_key);
-        if (currentConditions) {
-            if (currentConditions !== 'max limit') {
-                currentConditions.location_key = locationObj.location_key;
-                currentConditions.name = locationObj.name;
-                setSelectedLocationCurrentConditions(currentConditions);
-                setReduxTempCompareState(currentConditions);
-                setLocalTime(currentConditions.LocalObservationDateTime.slice(11, 16));
-                setLoading(false)
+    useEffect(() => {
+        const getSelectedLocationCurrentConditions = async (locationObj) => {
+            setLoading(true);
+            let currentConditions = await getCurrentConditionsByLocationKey(locationObj.location_key);
+            if (currentConditions) {
+                if (currentConditions !== 'max limit') {
+                    currentConditions.location_key = locationObj.location_key;
+                    currentConditions.name = locationObj.name;
+                    setSelectedLocationCurrentConditions(currentConditions);
+                    setLocalTime(currentConditions.LocalObservationDateTime.slice(11, 16));
+                    setLoading(false)
+                }
+                else {
+                    let err = 'API has reached its daily limit.';
+                    setErr(err);
+                }
             }
             else {
-                let err = 'API has reached its daily limit.';
+                let err = "An error occurred. Please try again to see the forecast.";
                 setErr(err);
+                setLoading(false);
             }
+        }
+         getSelectedLocationCurrentConditions(chosenLocation);
+         return () => setSelectedLocationCurrentConditions(null);
+    }, [chosenLocation])
+
+    useEffect(() => {
+        if (favorites.findIndex(i => i.location_key === chosenLocation.location_key) !== -1) {
+            setFavorite(true);
         }
         else {
-            let err = "An error occurred. Please try again to see the forecast.";
-            setErr(err);
-            setLoading(false);
+            setFavorite(false);
         }
-    }
-
-    const checkIfLocationIsFavorite = (location_key) => {
-        if (window.localStorage.getItem(local_favorites_key)) {
-            let favorites = JSON.parse(window.localStorage.getItem(local_favorites_key));
-            if (favorites.findIndex(i => i.location_key == location_key) !== -1) {
-                setFavorite(true);
-            }
-            else {
-                setFavorite(false);
-            }
-        }
-    }
+    }, [favorites, chosenLocation]);
 
     const toggleTemperatureFormat = () => {
-        setMetricTemperature(prevFormat => !prevFormat);
-
+        setMetricTemperature(metricTemperature => !metricTemperature);
     }
 
     return (
@@ -98,7 +79,6 @@ function WeatherDisplay() {
                                     <ErrorMsg err={err} /> :
                                     <Fragment>
                                         <FavoriteButton
-                                            refreshFavorites={checkIfLocationIsFavorite}
                                             isFavorite={isFavorite}
                                             location={{ name: selectedLocationCurrentConditions.name, location_key: selectedLocationCurrentConditions.location_key }}
                                         />
@@ -106,8 +86,8 @@ function WeatherDisplay() {
                                             <div className="flex-row-start">
                                                 <p className="chosen-location-title">{selectedLocationCurrentConditions.name}</p>
                                                 {
-                                                    getWeatherIconByTime(localTime) == 'night' ? <img src={moon} className="weather-icon fade-in" /> :
-                                                        <img className="weather-icon fade-in" src={getWeatherIconFromWeatherText(selectedLocationCurrentConditions.WeatherText)} />
+                                                    getWeatherIconByTime(localTime) === 'night' ? <img alt="Night" src={moon} className="weather-icon fade-in" /> :
+                                                        <img alt={selectedLocationCurrentConditions.WeatherText} className="weather-icon fade-in" src={getWeatherIconFromWeatherText(selectedLocationCurrentConditions.WeatherText)} />
                                                 }
                                             </div>
                                             <p>{new Date(selectedLocationCurrentConditions.LocalObservationDateTime).toString().slice(0, 15)}</p>

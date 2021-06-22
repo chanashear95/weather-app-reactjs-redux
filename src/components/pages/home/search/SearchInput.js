@@ -1,26 +1,33 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { chosenLocationActionsCreator } from 'store/actionsConfig';
 
 import { searchAutoComplete } from 'services/weather.service';
-import { setCurrentLocation } from 'redux/redux.service';
+import { onlyAllowEnglishLetters } from 'functions/textFormatting';
 
 import ErrorMsg from 'components/global/error_message/ErrorMsg';
 import Loading from 'components/global/loading/Loading';
 
+import 'components/pages/home/search/SearchInput.css';
+
 function SearchInput() {
 
-    const [locationSuggestions, setLocationSuggestions] = useState([]);
-    const [err, setErr] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
+    const [locationSuggestions, setLocationSuggestions] = useState([]);
+    const [err, setErr] = useState(null);
+    const dispatch = useDispatch();
+    const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
 
     const handleSearchChange = async (e) => {
         if (err) {
             setErr(null);
         }
         let searchText = e.target.value;
-        searchText = searchText.replace(/[^A-Za-z|| ]/ig, '')
+        searchText = onlyAllowEnglishLetters(searchText);
         setSearchText(searchText);
-        if (e.target.value && e.target.value != " ") {
+        if (searchText && searchText !== " ") {
             setLoading(true);
             let autoCompleteData = await searchAutoComplete(searchText);
             if (autoCompleteData) {
@@ -49,7 +56,7 @@ function SearchInput() {
             name: location_name,
             location_key: location_key,
         }
-        setCurrentLocation(locationObj);
+        updateChosenLocation(locationObj);
         setSearchText('');
         setLocationSuggestions([]);
     }
@@ -63,7 +70,7 @@ function SearchInput() {
         <div className={`flex-col search-container relative ${locationSuggestions.length > 0 || err ? 'autocomplete-open' : ''}`}>
             <input onClick={handleCloseDropDown} autoComplete={"off"} value={searchText} id="search" className="search-input" placeholder="Search..." onChange={handleSearchChange} />
             {locationSuggestions.length > 0 || err || loading ?
-                <div className="autocomplete-container w-100">
+                <div className="autocomplete-container">
                     {
                         err ?
                             <div className="text-center"><ErrorMsg err={err} /> </div> :

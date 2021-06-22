@@ -1,6 +1,7 @@
-import  store  from 'redux/redux';
-import { darkModeActions } from 'redux/reducers/darkMode.reducer';
-import { chosenLocationActions } from 'redux/reducers/chosenLocation.reducer';
+import  store  from 'store/redux';
+import { darkModeActions } from 'store/reducers/darkMode.reducer';
+import { chosenLocationActions } from 'store/reducers/chosenLocation.reducer';
+import { favoritesActions } from 'store/reducers/favorites.reducer';
 
 
 export const getReduxState = () =>{
@@ -23,5 +24,12 @@ export const getReduxState = () =>{
   export const setLightModeRedux = () =>{
     store.dispatch({
       type: darkModeActions.setLightMode,
+    })
+  }
+
+  export const updateFavorites = (favorites) => {
+    store.dispatch({
+      type: favoritesActions.updateFavorites,
+      favorites: favorites
     })
   }
