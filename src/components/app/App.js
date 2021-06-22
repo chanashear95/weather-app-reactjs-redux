@@ -11,16 +11,16 @@ import Navbar from 'components/global/navbar/Navbar';
 import HomePage from 'components/pages/home/HomePage';
 import FavoritesPage from 'components/pages/favorites/FavoritesPage';
 
-import 'components/app/App.css';
+import 'components/app/app.css';
 import 'responsive.css';
 
 function App() {
 
   const darkMode = useSelector(state => state.darkMode);
-  const [isLocationSet, setIsLocationSet] = useState(false);
   const dispatch = useDispatch();
   const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
-  const [mount, setMount] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isLocationSet, setIsLocationSet] = useState(false);
 
   const updateLocation = useCallback((locationObj) => {
     updateChosenLocation(locationObj);
@@ -34,11 +34,10 @@ function App() {
           name: locationData.EnglishName,
           location_key: locationData.Key,
         }
-        if (!mount) {
-          setMount(true);
+        if (!isMounted) {
+          setIsMounted(true);
           updateLocation(locationObj);
         }
-
         setIsLocationSet(true);
       }
       else {
@@ -57,9 +56,7 @@ function App() {
     else {
       initDefaultLocation();
     }
-  }, [mount, updateLocation]);
-
-
+  }, [isMounted, updateLocation]);
 
   return (
     <div className={darkMode ? 'app-darkmode' : ''}>

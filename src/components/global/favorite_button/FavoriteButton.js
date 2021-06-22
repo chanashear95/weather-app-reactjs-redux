@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { favoritesActionsCreator } from 'store/actionsConfig';
-import { addToFavorites, removeFromFavorites, getFavorites } from 'services/favorites.service';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
+import { favoritesActionsCreator } from 'store/actionsConfig';
+import { addToFavorites, removeFromFavorites, getFavorites } from 'services/favorites.service';
+
 import 'components/global/favorite_button/FavoriteButton.css';
 
 function FavoriteButton(props) {
 
-    const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
-    const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
     const dispatch = useDispatch();
     const { updateFavorites } = bindActionCreators(favoritesActionsCreator, dispatch);
+    const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
+    const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
 
     const addOrRemoveFromFavorites = () => {
         if (props.isFavorite) {

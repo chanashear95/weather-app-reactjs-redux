@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import graphics from 'images/no_favorites_graphics.png';
 import FavoriteCityBox from 'components/pages/favorites/FavoriteCityBox';
 
-
 function FavoritesList() {
 
     const favorites = useSelector(state => state.favorites);

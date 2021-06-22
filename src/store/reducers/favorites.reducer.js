@@ -1,9 +1,5 @@
 import { getFavorites } from "services/favorites.service";
 
-export const favoritesActions = {
-    updateFavorites: 'Update_Favorites',
-}
-
 let defaultState = getFavorites();
 
 const favoritesReducer = (state = defaultState, action) => {

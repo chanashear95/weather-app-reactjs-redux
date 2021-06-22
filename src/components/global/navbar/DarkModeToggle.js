@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { darkModeActionsCreator } from 'store/actionsConfig';
 import Switch from '@material-ui/core/Switch';
+import { darkModeActionsCreator } from 'store/actionsConfig';
 import 'components/global/navbar/DarkModeToggle.css';
 
 function DarkModeToggle() {
@@ -11,7 +11,7 @@ function DarkModeToggle() {
     const { turnDarkModeOn, turnDarkModeOff } = bindActionCreators(darkModeActionsCreator, dispatch);
 
     const handleDarkModeToggle = () => {
-        if(darkMode){
+        if (darkMode) {
             turnDarkModeOff();
         }
         else {

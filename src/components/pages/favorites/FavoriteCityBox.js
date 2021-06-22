@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { chosenLocationActionsCreator } from 'store/actionsConfig';
-import { Link } from 'react-router-dom';
 
+import { chosenLocationActionsCreator } from 'store/actionsConfig';
 import { getCurrentConditionsByLocationKey } from "services/weather.service";
 import { getWeatherIconByTime } from 'functions/dateAndTime';
 import { getWeatherIconFromWeatherText } from "functions/temperature";
@@ -17,35 +17,36 @@ import Loading from 'components/global/loading/Loading';
 
 function FavoriteCityBox(props) {
 
-    const [currentConditions, setCurrentConditions] = useState(null);
-    const [err, setErr] = useState(null);
-    const [localTime, setLocalTime] = useState('09:30')
-    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
+    const [currentConditions, setCurrentConditions] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [err, setErr] = useState(null);
+    const [localTime, setLocalTime] = useState('');
 
-    useEffect(() => {
-        const getCurrentConditions = async () => {
-            let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
-            if (currentConditions) {
-                if (currentConditions !== 'max limit') {
-                    setCurrentConditions(currentConditions)
-                    let localTime = currentConditions.LocalObservationDateTime.slice(11, 16);
-                    setLocalTime(localTime);
-                }
-                else {
-                    let err = 'API has reached its daily limit.';
-                    setErr(err);
-                }
+    const getCurrentConditions = useCallback(async () => {
+        let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
+        if (currentConditions) {
+            if (currentConditions !== 'max limit') {
+                setCurrentConditions(currentConditions)
+                let localTime = currentConditions.LocalObservationDateTime.slice(11, 16);
+                setLocalTime(localTime);
             }
             else {
-                let err = 'Could not display weather. Please try again.';
+                let err = 'API has reached its daily limit.';
                 setErr(err);
             }
-            setLoading(false);
         }
+        else {
+            let err = 'Could not display weather. Please try again.';
+            setErr(err);
+        }
+        setLoading(false);
+    }, [props.favorite.location_key]);
+
+    useEffect(() => {
         getCurrentConditions();
-    }, [props])
+    }, [props.favorite.location_key, getCurrentConditions]);
 
     const handleClickLocation = () => {
         updateChosenLocation(props.favorite);

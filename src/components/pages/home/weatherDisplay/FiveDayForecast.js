@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { getFiveDayForecastByLocationKey } from 'services/weather.service';
 import { convertFahrenheitToCelcius, getWeatherIconFromWeatherText } from 'functions/temperature';
@@ -10,33 +10,30 @@ function FiveDayForecast(props) {
 
   const [fiveDayForecast, setFiveDayForecast] = useState(null);
   const [err, setErr] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getSelectedLocationFiveDayForecast = async () => {
-      let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
-      if (fiveDayForecast) {
-        if (fiveDayForecast !== 'max limit') {
-          setFiveDayForecast(fiveDayForecast);
-          setLoading(false)
-        }
-        else {
-          let err = 'API has reached its daily limit.';
-          setErr(err);
-        }
-      }
-      else {
-        let err = 'An error occured. Please try again to see 5 day forecast.';
-        setErr(err);
+  const getSelectedLocationFiveDayForecast = useCallback(async () => {
+    let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
+    if (fiveDayForecast) {
+      if (fiveDayForecast !== 'max limit') {
+        setFiveDayForecast(fiveDayForecast);
         setLoading(false)
       }
+      else {
+        let err = 'API has reached its daily limit.';
+        setErr(err);
+      }
     }
-    getSelectedLocationFiveDayForecast();
+    else {
+      let err = 'An error occured. Please try again to see 5 day forecast.';
+      setErr(err);
+      setLoading(false)
+    }
   }, [props.selectedLocationKey]);
 
-  useEffect(()=>{
-    return () => setFiveDayForecast(null);
-  }, [])
+  useEffect(() => {
+    getSelectedLocationFiveDayForecast();
+  }, [props.selectedLocationKey, getSelectedLocationFiveDayForecast]);
 
   useEffect(() => {
     if (fiveDayForecast) {
@@ -47,6 +44,9 @@ function FiveDayForecast(props) {
     }
   }, [fiveDayForecast]);
 
+  useEffect(() => {
+    return () => setFiveDayForecast(null);
+  }, [])
 
   return (
     <div className="flex-between">

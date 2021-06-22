@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import darkModeReducer from 'store/reducers/darkMode.reducer';
 import chosenLocationReducer from 'store/reducers/chosenLocation.reducer';
 import favoritesReducer from 'store/reducers/favorites.reducer';
+import thunk from 'redux-thunk';
 
  const allReducers = combineReducers({
     darkMode: darkModeReducer,

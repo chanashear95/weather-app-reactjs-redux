@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { chosenLocationActionsCreator } from 'store/actionsConfig';
 
+import { chosenLocationActionsCreator } from 'store/actionsConfig';
 import { searchAutoComplete } from 'services/weather.service';
 import { onlyAllowEnglishLetters } from 'functions/textFormatting';
 
@@ -13,12 +13,12 @@ import 'components/pages/home/search/SearchInput.css';
 
 function SearchInput() {
 
+    const dispatch = useDispatch();
+    const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
     const [locationSuggestions, setLocationSuggestions] = useState([]);
     const [err, setErr] = useState(null);
-    const dispatch = useDispatch();
-    const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
 
     const handleSearchChange = async (e) => {
         if (err) {
@@ -48,8 +48,10 @@ function SearchInput() {
     }
 
     useEffect(() => {
-        setLoading(false);
-    }, [locationSuggestions]);
+        if (locationSuggestions || err) {
+            setLoading(false);
+        }
+    }, [locationSuggestions, err]);
 
     const handleSelectedLocation = (location_key, location_name) => {
         let locationObj = {
@@ -61,7 +63,7 @@ function SearchInput() {
         setLocationSuggestions([]);
     }
 
-    const handleCloseDropDown = (e) => {
+    const handleCloseDropDown = () => {
         setErr(null);
         setLocationSuggestions([]);
     }
