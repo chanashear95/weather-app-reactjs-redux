@@ -4,22 +4,22 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import 'components/global/navbar/Navbar.css';
 import DarkModeToggle from 'components/global/navbar/DarkModeToggle';
 
-function Navbar() {
+const navLinks = [
+    {
+        id: '1',
+        title: 'Home',
+        icon: <HomeIcon />,
+        inner_url: '/',
+    },
+    {
+        id: '2',
+        title: 'Favorites',
+        icon: <FavoriteIcon />,
+        inner_url: '/favorites'
+    }
+];
 
-    const navLinks = [
-        {
-            id: '1',
-            title: 'Home',
-            icon: <HomeIcon />,
-            inner_url: '/',
-        },
-        {
-            id: '2',
-            title: 'Favorites',
-            icon: <FavoriteIcon />,
-            inner_url: '/favorites'
-        }
-    ];
+function Navbar() {
 
     return (
         <nav className="flex-between padding-h-20 navbar">

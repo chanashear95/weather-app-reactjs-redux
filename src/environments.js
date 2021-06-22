@@ -5,14 +5,14 @@ import rain from 'images/weatherIcons/rain.png';
 import snow from 'images/weatherIcons/snow.png';
 
 
-export const weather_env = {
+export const WEATHER_API_ENV = {
     api_key: "eyfyYGh6pFLJh4gPVi6jaVNITBnC4DlO",
     base_url: 'http://dataservice.accuweather.com'
 }
 
-export const proxy_url = "https://let-me-in-cors.herokuapp.com/api/?url=";
+export const PROXY_URL = "https://let-me-in-cors.herokuapp.com/api/?url=";
 
-export const local_favorites_key = 'wthr@pp';
+export const LOCAL_FAVORITES_KEY = 'wthr@pp';
 
 
 export const WEATHER_OPTIONS = [
@@ -46,7 +46,7 @@ export const WEATHER_OPTIONS = [
     },
     {
         title: 'Shower',
-        icon: snow
+        icon: rain
     }
 ]
 

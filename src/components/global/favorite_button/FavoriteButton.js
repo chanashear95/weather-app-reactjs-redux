@@ -6,7 +6,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import { favoritesActionsCreator } from 'store/actionsConfig';
+import { favoritesActions } from 'store/actionsConfig';
 import { addToFavorites, removeFromFavorites, getFavorites } from 'services/favorites.service';
 
 import 'components/global/favorite_button/FavoriteButton.css';
@@ -14,7 +14,7 @@ import 'components/global/favorite_button/FavoriteButton.css';
 function FavoriteButton(props) {
 
     const dispatch = useDispatch();
-    const { updateFavorites } = bindActionCreators(favoritesActionsCreator, dispatch);
+    const { updateFavorites } = bindActionCreators(favoritesActions, dispatch);
     const [showAddedToFavoritesMessage, setShowAddedToFavoritesMessage] = useState(false);
     const [showRemovedFromFavoritesMessage, setShowRemovedFromFavoritesMessage] = useState(false);
 

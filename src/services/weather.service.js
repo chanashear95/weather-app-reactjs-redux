@@ -1,9 +1,9 @@
-import { weather_env, proxy_url } from 'environments';
+import { WEATHER_API_ENV, PROXY_URL } from 'environments';
 
-export const searchAutoComplete = async (searchText) => {
-    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/autocomplete?apikey=${weather_env.api_key}&q=${searchText}`);
+export const getSearchAutoCompleteData = async (searchText) => {
+    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/locations/v1/cities/autocomplete?apikey=${WEATHER_API_ENV.api_key}&q=${searchText}`);
     try {
-        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -35,9 +35,9 @@ export const searchAutoComplete = async (searchText) => {
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
-    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/currentconditions/v1/${location_key}?apikey=${weather_env.api_key}`);
+    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/currentconditions/v1/${location_key}?apikey=${WEATHER_API_ENV.api_key}`);
     try {
-        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,9 +62,9 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
 }
 
 export const getFiveDayForecastByLocationKey = async (location_key) => {
-    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${weather_env.api_key}`);
+    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${WEATHER_API_ENV.api_key}`);
     try {
-        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
             method: "GET",
             headers: {
                 "Content-Type": 'application/json'
@@ -89,9 +89,9 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
 }
 
 export const getConditionsByGeoLocation = async (lat, long) => {
-    let encodedUrl = encodeURIComponent(`${weather_env.base_url}/locations/v1/cities/geoposition/search?apikey=${weather_env.api_key}&q=${lat}%2C%20${long}`);
+    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/locations/v1/cities/geoposition/search?apikey=${WEATHER_API_ENV.api_key}&q=${lat}%2C%20${long}`);
     try{
-        let res = await fetch(`${proxy_url}${encodedUrl}`, {
+        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

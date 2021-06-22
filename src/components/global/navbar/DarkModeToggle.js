@@ -1,17 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Switch from '@material-ui/core/Switch';
-import { darkModeActionsCreator } from 'store/actionsConfig';
+import { darkModeActions } from 'store/actionsConfig';
 import 'components/global/navbar/DarkModeToggle.css';
 
 function DarkModeToggle() {
 
-    const darkMode = useSelector(state => state.darkMode);
+    const isDarkModeOn = useSelector(state => state.darkMode);
     const dispatch = useDispatch();
-    const { turnDarkModeOn, turnDarkModeOff } = bindActionCreators(darkModeActionsCreator, dispatch);
+    const { turnDarkModeOn, turnDarkModeOff } = bindActionCreators(darkModeActions, dispatch);
 
     const handleDarkModeToggle = () => {
-        if (darkMode) {
+        if (isDarkModeOn) {
             turnDarkModeOff();
         }
         else {
@@ -22,10 +22,10 @@ function DarkModeToggle() {
     return (
         <div className="darkmode-toggle-container">
             <Switch
-                checked={darkMode}
+                checked={isDarkModeOn}
                 onChange={handleDarkModeToggle}
                 color="default"
-                className={darkMode ? 'toggle active' : 'toggle'}
+                className={isDarkModeOn ? 'toggle active' : 'toggle'}
             />
             <p className="dark-mode-text">Dark Mode</p>
         </div>

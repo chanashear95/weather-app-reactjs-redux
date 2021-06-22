@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { chosenLocationActionsCreator } from 'store/actionsConfig';
+import { chosenLocationActions } from 'store/actionsConfig';
 import { getCurrentConditionsByLocationKey } from "services/weather.service";
 import { getWeatherIconByTime } from 'functions/dateAndTime';
 import { getWeatherIconFromWeatherText } from "functions/temperature";
@@ -18,18 +18,18 @@ import Loading from 'components/global/loading/Loading';
 function FavoriteCityBox(props) {
 
     const dispatch = useDispatch();
-    const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
+    const { updateChosenLocation } = bindActionCreators(chosenLocationActions, dispatch);
     const [currentConditions, setCurrentConditions] = useState(null);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
     const [localTime, setLocalTime] = useState('');
 
     const getCurrentConditions = useCallback(async () => {
-        let currentConditions = await getCurrentConditionsByLocationKey(props.favorite.location_key);
-        if (currentConditions) {
-            if (currentConditions !== 'max limit') {
-                setCurrentConditions(currentConditions)
-                let localTime = currentConditions.LocalObservationDateTime.slice(11, 16);
+        let currentConditionsData = await getCurrentConditionsByLocationKey(props.favoriteCityObj.location_key);
+        if (currentConditionsData) {
+            if (currentConditionsData !== 'max limit') {
+                setCurrentConditions(currentConditionsData)
+                let localTime = currentConditionsData.LocalObservationDateTime.slice(11, 16);
                 setLocalTime(localTime);
             }
             else {
@@ -42,14 +42,14 @@ function FavoriteCityBox(props) {
             setErr(err);
         }
         setLoading(false);
-    }, [props.favorite.location_key]);
+    }, [props.favoriteCityObj.location_key]);
 
     useEffect(() => {
         getCurrentConditions();
-    }, [props.favorite.location_key, getCurrentConditions]);
+    }, [props.favoriteCityObj.location_key, getCurrentConditions]);
 
     const handleClickLocation = () => {
-        updateChosenLocation(props.favorite);
+        updateChosenLocation(props.favoriteCityObj);
     }
 
     return (
@@ -60,7 +60,7 @@ function FavoriteCityBox(props) {
                     :
                     <FavoriteButton
                         isFavorite={true}
-                        location={{ name: props.favorite.name, location_key: props.favorite.location_key }}
+                        location={{ name: props.favoriteCityObj.name, location_key: props.favoriteCityObj.location_key }}
                     />
             }
 
@@ -74,7 +74,7 @@ function FavoriteCityBox(props) {
                             <Loading />
                             :
                             <div className="text-center">
-                                <p className="favorite-city-title">{props.favorite.name}</p>
+                                <p className="favorite-city-title">{props.favoriteCityObj.name}</p>
                                 {getWeatherIconByTime(localTime) === 'night' ?
                                     <img alt="Night" src={moon} className="weather-icon" /> :
                                     <img alt={currentConditions.WeatherText} className="weather-icon" src={getWeatherIconFromWeatherText(currentConditions.WeatherText)} />

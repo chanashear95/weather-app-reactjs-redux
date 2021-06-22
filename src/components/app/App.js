@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { chosenLocationActionsCreator } from 'store/actionsConfig';
+import { chosenLocationActions } from 'store/actionsConfig';
 import { getConditionsByGeoLocation } from 'services/weather.service';
 
 import Loading from 'components/global/loading/Loading';
@@ -18,26 +18,19 @@ function App() {
 
   const darkMode = useSelector(state => state.darkMode);
   const dispatch = useDispatch();
-  const { updateChosenLocation } = bindActionCreators(chosenLocationActionsCreator, dispatch);
-  const [isMounted, setIsMounted] = useState(false);
+  const { updateChosenLocation } = bindActionCreators(chosenLocationActions, dispatch);
   const [isLocationSet, setIsLocationSet] = useState(false);
 
-  const updateLocation = useCallback((locationObj) => {
-    updateChosenLocation(locationObj);
-  }, [updateChosenLocation]);
-
   useEffect(() => {
-    const getLocationByCoordinates = async (coords) => {
+
+    const getLocationDataByCoordinates = async (coords) => {
       let locationData = await getConditionsByGeoLocation(coords.latitude, coords.longitude);
       if (locationData) {
         let locationObj = {
           name: locationData.EnglishName,
           location_key: locationData.Key,
         }
-        if (!isMounted) {
-          setIsMounted(true);
-          updateLocation(locationObj);
-        }
+        updateChosenLocation(locationObj);
         setIsLocationSet(true);
       }
       else {
@@ -46,17 +39,18 @@ function App() {
     }
 
     const initDefaultLocation = () => {
-      updateLocation({ location_key: "215854", name: "Tel Aviv" });
+      updateChosenLocation({ location_key: "215854", name: "Tel Aviv" });
       setIsLocationSet(true);
     }
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (pos) => getLocationByCoordinates(pos.coords), initDefaultLocation);
+      navigator.geolocation.getCurrentPosition(async (pos) => getLocationDataByCoordinates(pos.coords), initDefaultLocation);
     }
     else {
       initDefaultLocation();
     }
-  }, [isMounted, updateLocation]);
+
+  }, []);
 
   return (
     <div className={darkMode ? 'app-darkmode' : ''}>

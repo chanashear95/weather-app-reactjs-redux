@@ -1,4 +1,4 @@
 
-export * as chosenLocationActionsCreator from 'store/action_creators/chosenLocationActions';
-export * as darkModeActionsCreator from 'store/action_creators/darkModeActions';
-export * as favoritesActionsCreator from 'store/action_creators/favoritesActions';
+export * as chosenLocationActions from 'store/actions/chosenLocationActions';
+export * as darkModeActions from 'store/actions/darkModeActions';
+export * as favoritesActions from 'store/actions/favoritesActions';

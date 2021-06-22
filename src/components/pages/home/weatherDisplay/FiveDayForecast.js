@@ -8,16 +8,16 @@ import Loading from 'components/global/loading/Loading';
 
 function FiveDayForecast(props) {
 
-  const [fiveDayForecast, setFiveDayForecast] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const getSelectedLocationFiveDayForecast = useCallback(async () => {
-    let fiveDayForecast = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
-    if (fiveDayForecast) {
-      if (fiveDayForecast !== 'max limit') {
-        setFiveDayForecast(fiveDayForecast);
-        setLoading(false)
+    let forecastData = await getFiveDayForecastByLocationKey(props.selectedLocationKey);
+    if (forecastData) {
+      if (forecastData !== 'max limit') {
+        setForecast(forecastData);
+        setLoading(false);
       }
       else {
         let err = 'API has reached its daily limit.';
@@ -29,23 +29,23 @@ function FiveDayForecast(props) {
       setErr(err);
       setLoading(false)
     }
-  }, [props.selectedLocationKey]);
+  },[props.selectedLocationKey]);
 
   useEffect(() => {
     getSelectedLocationFiveDayForecast();
   }, [props.selectedLocationKey, getSelectedLocationFiveDayForecast]);
 
   useEffect(() => {
-    if (fiveDayForecast) {
+    if (forecast) {
       let forecastContainer = document.getElementsByClassName('five-day-forecast-container')[0];
       if (forecastContainer) {
         forecastContainer.style.transform = 'translateY(0px)';
       }
     }
-  }, [fiveDayForecast]);
+  }, [forecast]);
 
   useEffect(() => {
-    return () => setFiveDayForecast(null);
+    return () => setForecast(null);
   }, [])
 
   return (
@@ -55,12 +55,12 @@ function FiveDayForecast(props) {
           <ErrorMsg err={err} /> :
           loading ?
             <Loading /> :
-            fiveDayForecast.DailyForecasts.map((forecast, idx) => {
+            forecast.DailyForecasts.map((forecast, idx) => {
               return (
                 <div key={'daily-forecast' + idx} className="daily-forecast">
                   <p>{new Date(forecast.Date).toString().slice(0, 3)}</p>
-                  <p> <strong>High </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Maximum.Value) : forecast.Temperature.Maximum.Value}°</p>
-                  <p> <strong>Low </strong>{props.metricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Minimum.Value) : forecast.Temperature.Minimum.Value}°</p>
+                  <p> <strong>High </strong>{props.isMetricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Maximum.Value) : forecast.Temperature.Maximum.Value}°</p>
+                  <p> <strong>Low </strong>{props.isMetricTemperature ? convertFahrenheitToCelcius(forecast.Temperature.Minimum.Value) : forecast.Temperature.Minimum.Value}°</p>
                   <p>{forecast.Day.IconPhrase}</p>
                   <img alt={forecast.Day.IconPhrase} className="weather-icon fade-in" src={getWeatherIconFromWeatherText(forecast.Day.IconPhrase)} />
                 </div>

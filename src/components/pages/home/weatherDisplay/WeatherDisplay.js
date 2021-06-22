@@ -18,8 +18,8 @@ function WeatherDisplay() {
 
     const favorites = useSelector(state => state.favorites);
     const chosenLocation = useSelector(state => state.chosenLocation);
-    const [chosenLocationCurrentConditions, setchosenLocationCurrentConditions] = useState(null);
-    const [metricTemperature, setMetricTemperature] = useState(true);
+    const [chosenLocationCurrentConditions, setChosenLocationCurrentConditions] = useState(null);
+    const [isMetricTemperature, setIsMetricTemperature] = useState(true);
     const [isFavorite, setFavorite] = useState(false);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
@@ -32,9 +32,8 @@ function WeatherDisplay() {
             if (currentConditions !== 'max limit') {
                 currentConditions.location_key = locationObj.location_key;
                 currentConditions.name = locationObj.name;
-                setchosenLocationCurrentConditions(currentConditions);
+                setChosenLocationCurrentConditions(currentConditions);
                 setLocalTime(currentConditions.LocalObservationDateTime.slice(11, 16));
-                setLoading(false)
             }
             else {
                 let err = 'API has reached its daily limit.';
@@ -44,8 +43,8 @@ function WeatherDisplay() {
         else {
             let err = "An error occurred. Please try again to see the forecast.";
             setErr(err);
-            setLoading(false);
         }
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -62,11 +61,11 @@ function WeatherDisplay() {
     }, [favorites, chosenLocation]);
 
     const toggleTemperatureFormat = () => {
-        setMetricTemperature(metricTemperature => !metricTemperature);
+        setIsMetricTemperature(isMetricTemperature => !isMetricTemperature);
     }
 
     useEffect(() => {
-        return () => setchosenLocationCurrentConditions(null);
+        return () => setChosenLocationCurrentConditions(null);
     }, [])
 
     return (
@@ -84,7 +83,7 @@ function WeatherDisplay() {
                                     <Fragment>
                                         <FavoriteButton
                                             isFavorite={isFavorite}
-                                            location={{ name: chosenLocationCurrentConditions.name, location_key: chosenLocationCurrentConditions.location_key }}
+                                            location={chosenLocation}
                                         />
                                         <div className="location-info-display">
                                             <div className="flex-row-start">
@@ -106,20 +105,20 @@ function WeatherDisplay() {
                                         <div className="text-center current-conditions-container">
                                             <p className="current-conditions-text">{chosenLocationCurrentConditions.WeatherText}</p>
                                             <p className="current-conditions-degrees">
-                                                {metricTemperature ?
+                                                {isMetricTemperature ?
                                                     parseInt(chosenLocationCurrentConditions.Temperature.Metric.Value) + '° C'
                                                     :
                                                     parseInt(chosenLocationCurrentConditions.Temperature.Imperial.Value) + '° F'
                                                 }
                                             </p>
-                                            <span className={metricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={toggleTemperatureFormat}>F°</span>
+                                            <span className={isMetricTemperature ? "clickable metric-toggle" : "metric-toggle"} onClick={toggleTemperatureFormat}>F°</span>
                                             <span>|</span>
-                                            <span className={metricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={toggleTemperatureFormat}>C°</span>
+                                            <span className={isMetricTemperature ? "metric-toggle" : "clickable metric-toggle"} onClick={toggleTemperatureFormat}>C°</span>
                                         </div>
                                     </Fragment>
                             }
                             <div className="five-day-forecast-container">
-                                <FiveDayForecast metricTemperature={metricTemperature} selectedLocationKey={chosenLocationCurrentConditions.location_key} />
+                                <FiveDayForecast isMetricTemperature={isMetricTemperature} selectedLocationKey={chosenLocationCurrentConditions.location_key} />
                             </div>
                         </div>
                     )
