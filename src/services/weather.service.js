@@ -1,33 +1,26 @@
-import { WEATHER_API_ENV, PROXY_URL } from 'environments';
+import { WEATHER_API_ENV, errorMessages } from 'environments';
+import axios from 'axios';
 
 export const getSearchAutoCompleteData = async (searchText) => {
-    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/locations/v1/cities/autocomplete?apikey=${WEATHER_API_ENV.api_key}&q=${searchText}`);
+    let requestUrl = `${WEATHER_API_ENV.base_url}/locations/v1/cities/autocomplete?apikey=${WEATHER_API_ENV.api_key}&q=${searchText}`;
     try {
-        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if (res.status === 200) {
-            let data = await res.json();
-            if (!data.Code) {
-                let suggestedLocations = [];
-                data.forEach(location => {
-                    suggestedLocations.push(
-                        {
-                            city: location.LocalizedName,
-                            country: location.Country.LocalizedName,
-                            location_key: location.Key,
-                        }
-                    )
-                })
-                return suggestedLocations;
-            }
-            else {
-                return 'max limit';
-            }
+        let res = await axios.get(requestUrl);
+        if (!res.status === 200) {
+            return false;
         }
+        if (res.data.Code) {
+            return errorMessages.maxApiLimit;
+        }
+        let suggestedLocations = res.data.map(location => {
+            let locationObj =
+            {
+                city: location.LocalizedName,
+                country: location.Country.LocalizedName,
+                location_key: location.Key,
+            }
+            return locationObj;
+        })
+        return suggestedLocations;
     }
     catch (e) {
         return false;
@@ -35,26 +28,16 @@ export const getSearchAutoCompleteData = async (searchText) => {
 }
 
 export const getCurrentConditionsByLocationKey = async (location_key) => {
-    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/currentconditions/v1/${location_key}?apikey=${WEATHER_API_ENV.api_key}`);
+    let requestUrl = `${WEATHER_API_ENV.base_url}/currentconditions/v1/${location_key}?apikey=${WEATHER_API_ENV.api_key}`;
     try {
-        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (res.status === 200) {
-            let data = await res.json();
-            if (data.Code) {
-                return 'max limit';
-            }
-            else {
-                return data[0];
-            }
-        }
-        else {
+        let res = await axios.get(`${requestUrl}`);
+        if (!res.status === 200) {
             return false;
         }
+        if (res.data.Code) {
+            return errorMessages.maxApiLimit;
+        }
+        return res.data[0];
     }
     catch (e) {
         return false;
@@ -62,26 +45,35 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
 }
 
 export const getFiveDayForecastByLocationKey = async (location_key) => {
-    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${WEATHER_API_ENV.api_key}`);
+    let requestUrl = `${WEATHER_API_ENV.base_url}/forecasts/v1/daily/5day/${location_key}?apikey=${WEATHER_API_ENV.api_key}`;
     try {
-        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": 'application/json'
-            }
-        });
-        if (res.status === 200) {
-            let data = await res.json();
-            if (data) {
-                return data;
-            }
-            else {
-                return 'max limit';
-            }
-        }
-        else {
+        let res = await axios.get(`${requestUrl}`);
+        if (!res.status === 200) {
             return false;
         }
+        if (res.data.Code) {
+            return errorMessages.maxApiLimit;
+        }
+        return res.data;
+    }
+    catch (e) {
+        return false;
+    }
+}
+
+export const getCurrentLocationConditionsAndFiveDayForecast = async (location_key) => {
+    try {
+        return await Promise.all([getCurrentConditionsByLocationKey(location_key), getFiveDayForecastByLocationKey(location_key)]).then(res => {
+            let currentConditions = res[0];
+            let fiveDayForecast = res[1];
+            if (currentConditions === errorMessages.maxApiLimit || fiveDayForecast === errorMessages.maxApiLimit) {
+                return errorMessages.maxApiLimit;
+            }
+            if (!currentConditions || !fiveDayForecast) {
+                return false;
+            }
+            return { currentConditions: currentConditions, fiveDayForecast: fiveDayForecast };
+        })
     }
     catch (e) {
         return false;
@@ -89,28 +81,18 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
 }
 
 export const getConditionsByGeoLocation = async (lat, long) => {
-    let encodedUrl = encodeURIComponent(`${WEATHER_API_ENV.base_url}/locations/v1/cities/geoposition/search?apikey=${WEATHER_API_ENV.api_key}&q=${lat}%2C%20${long}`);
-    try{
-        let res = await fetch(`${PROXY_URL}${encodedUrl}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (res.status === 200) {
-            let data = await res.json();
-            if (!data.Code) {
-                return data;
-            }
-            else {
-                return 'max limit';
-            }
-        }
-        else{
+    let requestUrl = `${WEATHER_API_ENV.base_url}/locations/v1/cities/geoposition/search?apikey=${WEATHER_API_ENV.api_key}&q=${lat}%2C%20${long}`;
+    try {
+        let res = await axios.get(`${requestUrl}`);
+        if (!res.status === 200) {
             return false;
         }
+        if (res.data.Code) {
+            return errorMessages.maxApiLimit;
+        }
+        return res.data;
     }
-    catch(e){
+    catch (e) {
         return false;
     }
 }

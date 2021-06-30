@@ -10,7 +10,7 @@ export const WEATHER_API_ENV = {
     base_url: 'http://dataservice.accuweather.com'
 }
 
-export const PROXY_URL = "https://let-me-in-cors.herokuapp.com/api/?url=";
+// export const PROXY_URL = "https://let-me-in-cors.herokuapp.com/api/?url=";
 
 export const LOCAL_FAVORITES_KEY = 'wthr@pp';
 
@@ -51,3 +51,7 @@ export const WEATHER_OPTIONS = [
 ]
 
 export const DEFAULT_WEATHER_ICON = overcast;
+
+export const errorMessages = {
+    maxApiLimit: 'max limit',
+}
