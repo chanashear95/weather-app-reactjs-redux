@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import graphics from 'images/no_favorites_graphics.png';
-import FavoriteCityBox from 'components/pages/favorites/FavoriteCityBox';
+import FavoriteCityBox from 'pages/favorites/FavoriteCityBox';
 
 function FavoritesList() {
 

@@ -1,8 +1,17 @@
-export const updateFavorites = (favorites) => {
+export const addToFavorites = (locationObj) => {
     return (dispatch) => {
         dispatch({
-            type: 'Update_Favorites',
-            favorites: favorites
+            type: 'Add_To_Favorites',
+            locationObj: locationObj
+        })
+    }
+}
+
+export const removeFromFavorites = (locationKey) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'Remove_From_Favorites',
+            locationKey: locationKey,
         })
     }
 }

@@ -1,0 +1,31 @@
+.five-day-forecast-container{
+    background: rgba(7, 12, 61, .7);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 10px 25px;
+    transition: 2s ease-in-out all;
+    transform: translateY(220px)
+}
+
+.five-day-forecast-container p, .app-darkmode .five-day-forecast-container p {
+    color: #fff;
+}
+
+.daily-forecast .weather-icon{
+    width: 35px;
+    margin: 0 auto;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.daily-forecast p {
+    font-size: 14px;
+}
+
+.daily-forecast p:first-of-type{
+    font-size: 18px;
+}

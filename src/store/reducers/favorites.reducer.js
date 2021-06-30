@@ -1,16 +1,24 @@
-import { getFavorites } from "services/favorites.service";
+import { getFavorites, updateLocalFavorites } from "services/favorites.service";
 
-let defaultState = getFavorites();
+let initialState = getFavorites();
 
-const favoritesReducer = (state = defaultState, action) => {
+const favoritesReducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'Update_Favorites':
-            state = action.favorites;
-            break;
+        case 'Add_To_Favorites':
+            let updatedState = [...state, action.locationObj];
+            updateLocalFavorites(updatedState);
+            return updatedState;
+        case 'Remove_From_Favorites':
+            let newState = [...state];
+            let locationIdx = newState.findIndex(i => i.location_key === action.locationKey);
+            if (locationIdx !== -1) {
+                newState.splice(locationIdx, 1);
+                updateLocalFavorites(newState);
+                return newState;
+            }
         default:
             return state;
     }
-    return state;
 }
 
 export default favoritesReducer;

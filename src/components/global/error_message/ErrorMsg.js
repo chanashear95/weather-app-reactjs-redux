@@ -1,6 +1,6 @@
-function ErrorMsg(props) {
+function ErrorMsg({err}) {
     return (
-        <p>{props.err}</p>
+        <p>{err}</p>
     )
 }
 

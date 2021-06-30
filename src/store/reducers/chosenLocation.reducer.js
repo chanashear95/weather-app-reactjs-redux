@@ -3,12 +3,12 @@ let defaultState = {location_key: "", name: ""}
 const chosenLocationReducer = (state = defaultState, action) => {
     switch (action.type) {
         case 'Set_Chosen_Location':
-            state = action.current_location
-            break;
+            let updatedState = {...state};
+            updatedState = action.current_location;
+            return updatedState;
         default:
             return state;
     }
-    return state;
 }
 
 export default chosenLocationReducer;

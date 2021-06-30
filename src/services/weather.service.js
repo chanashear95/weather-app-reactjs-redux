@@ -1,15 +1,20 @@
-import { WEATHER_API_ENV, errorMessages } from 'environments';
+import { WEATHER_API_ENV, ERROR_MESSAGES } from 'environments';
 import axios from 'axios';
 
-export const getSearchAutoCompleteData = async (searchText) => {
+export const getSearchAutoCompleteData = async (searchText, cancelTokenSource) => {
     let requestUrl = `${WEATHER_API_ENV.base_url}/locations/v1/cities/autocomplete?apikey=${WEATHER_API_ENV.api_key}&q=${searchText}`;
     try {
-        let res = await axios.get(requestUrl);
+        let res = await axios.get(requestUrl, {
+            cancelToken: cancelTokenSource.token
+        });
         if (!res.status === 200) {
             return false;
         }
         if (res.data.Code) {
-            return errorMessages.maxApiLimit;
+            return ERROR_MESSAGES.maxApiLimit;
+        }
+        if (!res.data) {
+            return false;
         }
         let suggestedLocations = res.data.map(location => {
             let locationObj =
@@ -17,6 +22,8 @@ export const getSearchAutoCompleteData = async (searchText) => {
                 city: location.LocalizedName,
                 country: location.Country.LocalizedName,
                 location_key: location.Key,
+                displayedText: location.LocalizedName + ',' + location.Country.LocalizedName,
+                id: location.Key
             }
             return locationObj;
         })
@@ -32,15 +39,15 @@ export const getCurrentConditionsByLocationKey = async (location_key) => {
     try {
         let res = await axios.get(`${requestUrl}`);
         if (!res.status === 200) {
-            return false;
+            return ERROR_MESSAGES.serverError;
         }
         if (res.data.Code) {
-            return errorMessages.maxApiLimit;
+            return ERROR_MESSAGES.maxApiLimit;
         }
         return res.data[0];
     }
     catch (e) {
-        return false;
+        return ERROR_MESSAGES.serverError;
     }
 }
 
@@ -49,34 +56,31 @@ export const getFiveDayForecastByLocationKey = async (location_key) => {
     try {
         let res = await axios.get(`${requestUrl}`);
         if (!res.status === 200) {
-            return false;
+            return ERROR_MESSAGES.serverError;
         }
         if (res.data.Code) {
-            return errorMessages.maxApiLimit;
+            return ERROR_MESSAGES.maxApiLimit;
         }
         return res.data;
     }
     catch (e) {
-        return false;
+        return ERROR_MESSAGES.serverError;
     }
 }
 
 export const getCurrentLocationConditionsAndFiveDayForecast = async (location_key) => {
     try {
-        return await Promise.all([getCurrentConditionsByLocationKey(location_key), getFiveDayForecastByLocationKey(location_key)]).then(res => {
-            let currentConditions = res[0];
-            let fiveDayForecast = res[1];
-            if (currentConditions === errorMessages.maxApiLimit || fiveDayForecast === errorMessages.maxApiLimit) {
-                return errorMessages.maxApiLimit;
-            }
-            if (!currentConditions || !fiveDayForecast) {
-                return false;
-            }
-            return { currentConditions: currentConditions, fiveDayForecast: fiveDayForecast };
-        })
+        let [currentConditions, fiveDayForecast] = await axios.all([getCurrentConditionsByLocationKey(location_key), getFiveDayForecastByLocationKey(location_key)]);
+        if (currentConditions === ERROR_MESSAGES.maxApiLimit || fiveDayForecast === ERROR_MESSAGES.maxApiLimit) {
+            return ERROR_MESSAGES.maxApiLimit;
+        }
+        if (currentConditions === ERROR_MESSAGES.serverError || fiveDayForecast === ERROR_MESSAGES.serverError) {
+            return ERROR_MESSAGES.serverError;
+        }
+        return { currentConditions: currentConditions, fiveDayForecast: fiveDayForecast };
     }
     catch (e) {
-        return false;
+        return ERROR_MESSAGES.serverError;
     }
 }
 
@@ -88,7 +92,7 @@ export const getConditionsByGeoLocation = async (lat, long) => {
             return false;
         }
         if (res.data.Code) {
-            return errorMessages.maxApiLimit;
+            return ERROR_MESSAGES.maxApiLimit;
         }
         return res.data;
     }

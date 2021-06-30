@@ -1,3 +1,11 @@
+.MuiAlert-standardSuccess.added-favorites-msg {
+    background-color: rgb(155 230 68);
+}
+
+.MuiAlert-standardSuccess.removed-favorites-msg {
+    background-color: rgb(247 170 61);
+}
+
 .favorite-btn{
     position: absolute;
     right: 25px;

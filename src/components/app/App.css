@@ -118,6 +118,10 @@ input:focus{
     background-color: #7274af;
 }
 
+.pb-40{
+    padding-bottom: 40px;
+}
+
 /* Animations */
 .fade-in{
 -webkit-animation: fadein 2s; 

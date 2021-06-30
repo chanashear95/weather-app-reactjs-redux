@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { chosenLocationActions } from 'store/actionsConfig';
 import { getConditionsByGeoLocation } from 'services/weather.service';
+import { DEFAULT_LOCATION_KEY } from 'environments';
 
 import Loading from 'components/global/loading/Loading';
 import Navbar from 'components/global/navbar/Navbar';
-import HomePage from 'components/pages/home/HomePage';
-import FavoritesPage from 'components/pages/favorites/FavoritesPage';
+import HomePage from 'pages/home/HomePage';
+import FavoritesPage from 'pages/favorites/FavoritesPage';
 
 import 'components/app/app.css';
 import 'responsive.css';
@@ -39,7 +40,7 @@ function App() {
     }
 
     const initDefaultLocation = () => {
-      updateChosenLocation({ location_key: "215854", name: "Tel Aviv" });
+      updateChosenLocation(DEFAULT_LOCATION_KEY); 
       setIsLocationSet(true);
     }
 

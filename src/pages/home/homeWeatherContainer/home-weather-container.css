@@ -1,0 +1,22 @@
+.home-weather-container{
+    flex: 2;
+    width: 100%;
+    max-width: 1500px;
+    min-height: 550px;
+    padding: 20px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px rgb(0 0 0 / 20%);
+    background-repeat: no-repeat;
+    background-size: cover;    
+}
+
+.app-darkmode .home-weather-container{
+    box-shadow: 0px 0px 25px rgb(255 255 255 / 30%);
+}
+
+
+.home-weather-container p, .app-darkmode .home-weather-container p {
+    color: #535686;
+}

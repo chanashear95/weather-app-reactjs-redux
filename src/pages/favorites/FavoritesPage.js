@@ -1,5 +1,5 @@
-import 'components/pages/favorites/Favorites.css';
-import FavoritesList from "components/pages/favorites/FavoritesList";
+import 'pages/favorites/Favorites.css';
+import FavoritesList from "pages/favorites/FavoritesList";
 
 function FavoritesPage() {
     return (

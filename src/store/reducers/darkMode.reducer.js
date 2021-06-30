@@ -1,15 +1,14 @@
-const darkModeReducer = (state = false, action) => {
+let initialState = false;
+
+const darkModeReducer = (state = initialState, action) => {
     switch (action.type) {
         case "Set_Dark_Mode":
-            state = true;
-            break;
+            return true;
         case 'Set_Light_Mode':
-            state = false;
-            break;
+            return false;
         default:
             return state;
     }
-    return state;
 }
 
 export default darkModeReducer;

@@ -52,6 +52,9 @@ export const WEATHER_OPTIONS = [
 
 export const DEFAULT_WEATHER_ICON = overcast;
 
-export const errorMessages = {
-    maxApiLimit: 'max limit',
+export const ERROR_MESSAGES = {
+    maxApiLimit: 'API has reached its max daily limit. Please try again tomorrow.',
+    serverError: 'An error has occurred. Please try again.'
 }
+
+export const DEFAULT_LOCATION_KEY = '215854';
